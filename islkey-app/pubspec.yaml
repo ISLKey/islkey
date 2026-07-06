@@ -1,0 +1,43 @@
+name: islkey
+description: ISLKey door access app by ISL Technologies.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+
+  # NFC (read the tag mounted beside the door)
+  nfc_manager: ^3.3.0
+
+  # Secure storage (Bearer token)
+  flutter_secure_storage: ^9.0.0
+
+  # HTTP
+  http: ^1.2.1
+
+  # Cached network images (customer logo)
+  cached_network_image: ^3.3.1
+
+  # Date/time formatting
+  intl: ^0.19.0
+
+  # App version display
+  package_info_plus: ^8.0.0
+
+  # Open website / privacy policy links
+  url_launcher: ^6.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

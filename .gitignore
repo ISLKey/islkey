@@ -1,0 +1,34 @@
+# ─── Build artifacts / dependencies (regenerable) ──────────────────────────
+# Flutter app (islkey-app)
+islkey-app/build/
+islkey-app/.dart_tool/
+islkey-app/.flutter-plugins-dependencies
+islkey-app/android/.gradle/
+islkey-app/android/app/build/
+islkey-app/ios/Pods/
+islkey-app/ios/.symlinks/
+
+# PlatformIO firmware (islkey-firmware)
+islkey-firmware/.pio/
+
+# Electron flasher (islkey-flasher)
+islkey-flasher/node_modules/
+islkey-flasher/dist/
+
+# ─── Secrets / operational data (never commit) ─────────────────────────────
+# Per-device AP passwords + serial register
+islkey-flasher/serials/
+# Real provisioning configs (sample-config.islkey is kept as a template)
+*.islkey
+!sample-config.islkey
+
+# ─── OS / editor cruft ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.iml
+
+# ─── Generated design outputs (rebuildable from the .py generators) ────────
+_wiring_p*.png

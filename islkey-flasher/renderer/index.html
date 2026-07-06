@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+<title>ISLKey Flasher</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e17;--surface:#111827;--surface2:#1a2133;
+  --border:#1f2d45;--border2:#2a3d5c;
+  --accent:#0ea5e9;--accent-dim:rgba(14,165,233,0.08);
+  --green:#22c55e;--green-dim:#14532d;
+  --red:#ef4444;--amber:#f59e0b;--purple:#a78bfa;
+  --text:#e2e8f0;--text-muted:#64748b;--text-dim:#94a3b8;
+  --mono:'Cascadia Code','Fira Code','Courier New',monospace;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;user-select:none;}
+
+/* Titlebar */
+.titlebar{-webkit-app-region:drag;height:42px;background:var(--surface);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;
+  padding:0 16px;flex-shrink:0;gap:12px;}
+.tb-logo{font-size:14px;font-weight:800;letter-spacing:0.14em;color:var(--accent);text-transform:uppercase;}
+.tb-sep{width:1px;height:16px;background:var(--border2);}
+.tb-sub{font-size:12px;color:var(--text-muted);}
+.tb-controls{-webkit-app-region:no-drag;display:flex;gap:5px;margin-left:auto;}
+.wc{width:28px;height:28px;border:none;border-radius:6px;background:transparent;
+  color:var(--text-muted);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:13px;transition:background 0.15s,color 0.15s;}
+.wc:hover{background:var(--border);color:var(--text);}
+.wc.x:hover{background:var(--red);color:#fff;}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:300px 1fr;flex:1;overflow:hidden;}
+
+/* Sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto;padding:16px;gap:18px;}
+.s-label{font-size:10px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+
+/* Board cards */
+.boards{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.board{border:1.5px solid var(--border);border-radius:9px;padding:10px;
+  cursor:pointer;transition:border-color 0.15s,background 0.15s;position:relative;}
+.board:hover{border-color:var(--border2);background:var(--surface2);}
+.board.sel{border-color:var(--accent);background:var(--accent-dim);}
+.board-icon{font-size:20px;margin-bottom:5px;}
+.board-name{font-size:11px;font-weight:700;color:var(--text);line-height:1.3;}
+.board-sub{font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.3;}
+.board-tick{position:absolute;top:7px;right:7px;width:14px;height:14px;
+  border-radius:50%;background:var(--accent);display:none;
+  align-items:center;justify-content:center;font-size:9px;color:#fff;}
+.board.sel .board-tick{display:flex;}
+
+/* Controls */
+select{width:100%;padding:8px 10px;background:var(--surface2);
+  border:1.5px solid var(--border);border-radius:7px;color:var(--text);
+  font-size:12px;cursor:pointer;outline:none;transition:border-color 0.15s;
+  appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748b'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+select:focus{border-color:var(--accent);}
+select option{background:var(--surface);}
+
+.port-row{display:flex;gap:6px;}
+.port-row select{flex:1;}
+.icon-btn{width:34px;height:34px;background:var(--surface2);
+  border:1.5px solid var(--border);border-radius:7px;color:var(--text-muted);
+  font-size:15px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;transition:border-color 0.15s,color 0.15s;}
+.icon-btn:hover{border-color:var(--border2);color:var(--text);}
+
+/* Firmware list */
+.fw-list{display:flex;flex-direction:column;gap:5px;}
+.fw-item{display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border:1.5px solid var(--border);border-radius:7px;cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;}
+.fw-item:hover{border-color:var(--border2);background:var(--surface2);}
+.fw-item.sel{border-color:var(--accent);background:var(--accent-dim);}
+.fw-name{font-size:11px;font-weight:600;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fw-meta{font-size:10px;color:var(--text-muted);}
+.fw-badge{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;
+  background:rgba(167,139,250,0.15);color:var(--purple);flex-shrink:0;}
+
+/* Serial panel */
+.serial-panel{background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:9px;padding:12px;}
+.serial-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.serial-label{font-size:10px;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text-muted);}
+.serial-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent);}
+.ap-val{font-family:var(--mono);font-size:13px;font-weight:800;
+  color:var(--amber);letter-spacing:0.12em;}
+.regen-btn{font-size:10px;padding:3px 8px;background:transparent;
+  border:1px solid var(--border2);border-radius:4px;color:var(--text-muted);
+  cursor:pointer;transition:border-color 0.15s,color 0.15s;}
+.regen-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Register stats */
+.reg-row{display:flex;gap:8px;}
+.reg-stat{flex:1;background:var(--surface2);border:1px solid var(--border);
+  border-radius:7px;padding:8px;text-align:center;}
+.reg-num{font-size:20px;font-weight:700;color:var(--text);}
+.reg-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:0.06em;margin-top:2px;}
+
+/* Erase */
+.btn-danger{width:100%;padding:9px;border:1.5px solid var(--red);border-radius:7px;
+  background:transparent;color:var(--red);font-size:12px;font-weight:600;
+  cursor:pointer;transition:background 0.15s;}
+.btn-danger:hover:not(:disabled){background:rgba(239,68,68,0.1);}
+.btn-danger:disabled{opacity:0.3;cursor:not-allowed;}
+
+/* Content */
+.content{display:flex;flex-direction:column;overflow:hidden;}
+
+/* Status bar */
+.statusbar{padding:12px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;background:var(--surface);flex-shrink:0;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--text-muted);flex-shrink:0;transition:background 0.3s;}
+.dot.ready{background:var(--green);box-shadow:0 0 7px var(--green);}
+.dot.busy{background:var(--amber);box-shadow:0 0 7px var(--amber);animation:pulse 1s infinite;}
+.dot.error{background:var(--red);box-shadow:0 0 7px var(--red);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.status-text{font-size:12px;color:var(--text-dim);flex:1;}
+.status-ver{font-size:10px;color:var(--text-muted);font-family:var(--mono);}
+
+/* Terminal */
+.terminal{flex:1;background:#060a10;padding:16px 20px;
+  overflow-y:auto;font-family:var(--mono);font-size:11.5px;line-height:1.75;color:#374151;}
+.l{white-space:pre-wrap;word-break:break-all;}
+.l.i{color:#94a3b8;}.l.s{color:var(--green);}
+.l.e{color:var(--red);}.l.a{color:var(--accent);}
+.l.m{color:#1f2d45;}.l.p{color:var(--amber);}
+.l.w{color:#f59e0b;}.l.h{color:var(--purple);}
+
+/* Action bar */
+.actionbar{padding:14px 20px;border-top:1px solid var(--border);
+  background:var(--surface);display:flex;gap:10px;align-items:center;flex-shrink:0;}
+.btn-ghost{padding:9px 16px;background:var(--surface2);color:var(--text-dim);
+  border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-weight:600;
+  cursor:pointer;transition:border-color 0.15s,color 0.15s;white-space:nowrap;}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
+.prog-wrap{flex:1;height:4px;background:var(--border);border-radius:2px;
+  overflow:hidden;opacity:0;transition:opacity 0.3s;}
+.prog-wrap.show{opacity:1;}
+.prog-bar{height:100%;background:var(--accent);border-radius:2px;
+  width:0%;transition:width 0.4s;}
+.btn-flash{padding:10px 28px;background:var(--accent);border:none;
+  border-radius:7px;color:#fff;font-size:13px;font-weight:700;
+  cursor:pointer;transition:opacity 0.15s,transform 0.1s;letter-spacing:0.02em;
+  white-space:nowrap;}
+.btn-flash:hover:not(:disabled){background:#38bdf8;}
+.btn-flash:active{transform:scale(0.98);}
+.btn-flash:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+.empty{font-size:11px;color:var(--text-muted);text-align:center;padding:8px 0;}
+</style>
+</head>
+<body>
+
+<div class="titlebar">
+  <div class="tb-logo">ISLKey</div>
+  <div class="tb-sep"></div>
+  <div class="tb-sub">Firmware Flasher v1.3.0</div>
+  <div class="tb-controls">
+    <button class="wc" onclick="isl.minimize()">&#x2212;</button>
+    <button class="wc" onclick="isl.maximize()">&#x25A1;</button>
+    <button class="wc x" onclick="isl.close()">&#x2715;</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <!-- Board type -->
+    <div>
+      <div class="s-label">Board Type</div>
+      <div class="boards">
+        <div class="board sel" data-board="relay-board" onclick="selectBoard(this)">
+          <div class="board-tick">✓</div>
+          <div class="board-icon">🔌</div>
+          <div class="board-name">ISLKey Relay</div>
+          <div class="board-sub">WROOM dual relay DC5-60V</div>
+        </div>
+        <div class="board" data-board="devkit" onclick="selectBoard(this)">
+          <div class="board-tick">✓</div>
+          <div class="board-icon">🔧</div>
+          <div class="board-name">DevKit V1</div>
+          <div class="board-sub">38-pin dev board USB-C</div>
+        </div>
+        <div class="board" data-board="ttgo" onclick="selectBoard(this)">
+          <div class="board-tick">✓</div>
+          <div class="board-icon">🖥</div>
+          <div class="board-name">TTGO T-Display</div>
+          <div class="board-sub">ESP32 with LCD display</div>
+        </div>
+        <div class="board" data-board="wt32-eth01" onclick="selectBoard(this)">
+          <div class="board-tick">✓</div>
+          <div class="board-icon">🌐</div>
+          <div class="board-name">WT32-ETH01</div>
+          <div class="board-sub">Ethernet + PoE board</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Port -->
+    <div>
+      <div class="s-label">Serial Port</div>
+      <div class="port-row">
+        <select id="port-sel"><option value="">Scanning...</option></select>
+        <button class="icon-btn" onclick="loadPorts()" title="Refresh">↻</button>
+      </div>
+    </div>
+
+    <!-- Baud -->
+    <div>
+      <div class="s-label">Flash Speed</div>
+      <select id="baud-sel">
+        <option value="921600">921600 — Fast (recommended)</option>
+        <option value="460800">460800 — Medium</option>
+        <option value="115200">115200 — Safe (slow)</option>
+      </select>
+    </div>
+
+    <!-- Firmware -->
+    <div>
+      <div class="s-label">Firmware File</div>
+      <div id="fw-list" class="fw-list">
+        <div class="empty">No .bin files in firmware/ folder</div>
+      </div>
+    </div>
+
+    <!-- Config file loader -->
+    <div>
+      <div class="s-label">Config File</div>
+      <button class="btn-ghost" id="load-config-btn" onclick="loadConfigFile()"
+              style="width:100%;font-size:12px;border-color:var(--accent);color:var(--accent);">
+        📂 Load .islkey File
+      </button>
+      <div id="config-loaded-indicator" style="display:none;margin-top:8px;padding:8px 10px;
+           background:rgba(34,197,94,0.1);border:1px solid var(--green);border-radius:7px;">
+        <div style="font-size:11px;font-weight:700;color:var(--green);">CONFIG LOADED</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;" id="config-file-summary"></div>
+      </div>
+    </div>
+
+    <!-- WiFi (set at flash time) -->
+    <div>
+      <div class="s-label">WiFi (set at flash time)</div>
+      <input id="wifi-ssid" type="text" placeholder="SSID" autocomplete="off"
+        style="width:100%;padding:8px 10px;margin-bottom:6px;background:var(--surface2);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-size:12px;outline:none;">
+      <input id="wifi-pass" type="text" placeholder="Password" autocomplete="off"
+        style="width:100%;padding:8px 10px;margin-bottom:6px;background:var(--surface2);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-size:12px;outline:none;">
+      <button class="btn-ghost" onclick="usePcWifi()" style="width:100%;font-size:11px;">📶 Use this PC's WiFi</button>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">
+        Filled in → device joins WiFi on boot. Blank → device starts its setup AP.
+      </div>
+    </div>
+
+    <!-- Serial number + AP password -->
+    <div>
+      <div class="s-label">Unit Identity</div>
+      <div class="serial-panel">
+        <div class="serial-row">
+          <span class="serial-label">Serial</span>
+          <button class="regen-btn" onclick="newSerial()">Regenerate</button>
+        </div>
+        <div class="serial-val" id="serial-display">Generating...</div>
+        <div style="margin-top:10px;">
+          <div class="serial-label" style="margin-bottom:4px;">WiFi AP Password</div>
+          <div class="ap-val" id="ap-display">--------</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">
+            Burned into device at flash time. Logged to register.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register stats -->
+    <div>
+      <div class="s-label">Asset Register</div>
+      <div class="reg-row" style="margin-bottom:8px;">
+        <div class="reg-stat">
+          <div class="reg-num" id="reg-total">—</div>
+          <div class="reg-lbl">Flashed</div>
+        </div>
+        <div class="reg-stat">
+          <div class="reg-num" id="reg-next">—</div>
+          <div class="reg-lbl">Next S/N</div>
+        </div>
+      </div>
+      <button class="btn-ghost" style="width:100%;font-size:11px;" onclick="isl.openRegister()">
+        Open Serial Register CSV
+      </button>
+    </div>
+
+    <!-- Erase -->
+    <div>
+      <div class="s-label">Utilities</div>
+      <button class="btn-danger" id="erase-btn" onclick="eraseFlash()">
+        Erase Flash (Factory Reset)
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Main -->
+  <div class="content">
+
+    <div class="statusbar">
+      <div class="dot idle" id="dot"></div>
+      <div class="status-text" id="status-text">Select board, port and firmware — then click Flash</div>
+      <div class="status-ver">ISLKey Flasher v1.3.0 · ISL</div>
+    </div>
+
+    <div class="terminal" id="terminal">
+      <div class="l m">╔═══════════════════════════════════════════════╗</div>
+      <div class="l m">║          ISLKey Firmware Flasher v1.3          ║</div>
+      <div class="l m">║                ISL Technologies                ║</div>
+      <div class="l m">╚═══════════════════════════════════════════════╝</div>
+      <div class="l"> </div>
+      <div class="l i">Ready. Select board type, COM port and firmware file.</div>
+      <div class="l i">A unique serial number and AP password will be burned</div>
+      <div class="l i">into each unit and logged to the asset register CSV.</div>
+      <div class="l"> </div>
+      <div class="l m">How to enter flash mode:</div>
+      <div class="l m">  Hold BOOT/IO0 button → press RESET → release BOOT</div>
+      <div class="l m">  Then click Flash Firmware below.</div>
+      <div class="l"> </div>
+    </div>
+
+    <div class="actionbar">
+      <button class="btn-ghost" onclick="clearLog()">Clear</button>
+      <button class="btn-ghost" onclick="isl.openRegister()">📋 Register</button>
+      <div class="prog-wrap" id="prog-wrap"><div class="prog-bar" id="prog-bar"></div></div>
+      <button class="btn-flash" id="flash-btn" onclick="flash()">⚡  Flash Firmware</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let selBoard    = 'relay-board';
+let selFirmware = null;
+let flashing    = false;
+let curSerial   = '';
+let curAPPwd    = '';
+let loadedConfig = null;   // parsed .islkey config when loaded
+
+// Board selection
+function selectBoard(el) {
+    document.querySelectorAll('.board').forEach(b => b.classList.remove('sel'));
+    el.classList.add('sel');
+    selBoard = el.dataset.board;
+    log(`Board: ${el.querySelector('.board-name').textContent}`, 'a');
+    filterFirmware();
+}
+
+// Port loading
+async function loadPorts() {
+    const s = document.getElementById('port-sel');
+    s.innerHTML = '<option>Scanning...</option>';
+    const ports = await isl.listPorts();
+    if (!ports.length) {
+        s.innerHTML = '<option value="">No ports found</option>';
+        return;
+    }
+    s.innerHTML = ports.map(p => {
+        const label = p.friendlyName && p.friendlyName !== p.path
+            ? `${p.path}  —  ${p.friendlyName}`
+            : p.path;
+        return `<option value="${p.path}">${label}</option>`;
+    }).join('');
+    log(`Found ${ports.length} port(s)`, 'i');
+}
+
+// Firmware loading
+let allFirmware = [];
+async function loadFirmware() {
+    allFirmware = await isl.listFirmware();
+    filterFirmware();
+}
+
+function filterFirmware() {
+    const container = document.getElementById('fw-list');
+    const filtered  = allFirmware.filter(f => f.boardHint === 'all' || f.boardHint === selBoard);
+    if (!filtered.length) {
+        container.innerHTML = `<div class="empty">No firmware for this board type<br>Place .bin files in firmware/ folder</div>`;
+        selFirmware = null;
+        return;
+    }
+    container.innerHTML = filtered.map((f, i) => `
+        <div class="fw-item ${i === 0 ? 'sel' : ''}" data-path="${f.path}" onclick="selFW(this,'${f.path}')">
+            <div style="flex:1;min-width:0;">
+                <div class="fw-name">${f.name}</div>
+                <div class="fw-meta">${f.sizekb} KB</div>
+            </div>
+            <div class="fw-badge">${f.boardHint === 'all' ? 'UNIVERSAL' : selBoard.toUpperCase()}</div>
+        </div>
+    `).join('');
+    selFirmware = filtered[0]?.path || null;
+}
+
+function selFW(el, p) {
+    document.querySelectorAll('.fw-item').forEach(i => i.classList.remove('sel'));
+    el.classList.add('sel');
+    selFirmware = p;
+    log(`Firmware: ${el.querySelector('.fw-name').textContent}`, 'a');
+}
+
+// Load .islkey config file
+async function loadConfigFile() {
+    const result = await isl.loadConfigFile();
+    if (result.cancelled) return;
+    if (!result.ok) {
+        log(`✗ Config file error: ${result.error}`, 'e');
+        if (result.expired) log('  Generate a new token in ISLKey admin → Devices', 'm');
+        return;
+    }
+
+    loadedConfig = result.config;
+    const cfg = result.config;
+
+    log('', 'm');
+    log('══════════════════════════════════════════', 'm');
+    log('  Config file loaded', 'a');
+    log('══════════════════════════════════════════', 'm');
+    log(`Door:     ${cfg.device?.door_name || '—'}`, 'h');
+    log(`Site:     ${cfg.device?.site_name || '—'} (${cfg.device?.site_code || '—'})`, 'h');
+    log(`API URL:  ${cfg.api?.url || '—'}`, 'h');
+    log(`Token:    ${(cfg.api?.token || '').substring(0, 16)}...`, 'h');
+    log(`Expires:  ${cfg.expires_at || '—'}`, 'i');
+    log('Board type auto-selected; serial + AP password set at flash time.', 'i');
+    log('Only WiFi needs entering on the device.', 'i');
+
+    // Auto-select the board type from the config
+    const boardType = cfg.device?.board_type || 'relay-board';
+    const boardCard = document.querySelector(`[data-board="${boardType}"]`);
+    if (boardCard) selectBoard(boardCard);
+
+    document.getElementById('config-loaded-indicator').style.display = 'block';
+    document.getElementById('config-file-summary').textContent =
+        `${cfg.device?.door_name || 'Unknown door'} — ${cfg.device?.site_name || 'Unknown site'}`;
+
+    setStatus('ready', `Config loaded — ${cfg.device?.door_name || 'door'} ready to flash`);
+}
+
+// Use the PC's current WiFi
+async function usePcWifi() {
+    const r = await isl.getPcWifi();
+    if (!r.ok) { log(`✗ ${r.error}`, 'e'); return; }
+    document.getElementById('wifi-ssid').value = r.ssid || '';
+    document.getElementById('wifi-pass').value = r.password || '';
+    log(`WiFi set from this PC: ${r.ssid}${r.password ? '' : ' (no saved password — enter manually)'}`, 'a');
+}
+
+// Serial number
+async function newSerial() {
+    const r = await isl.generateSerial();
+    curSerial = r.serial;
+    curAPPwd  = r.apPassword;
+    document.getElementById('serial-display').textContent = curSerial;
+    document.getElementById('ap-display').textContent     = curAPPwd;
+}
+
+// Register stats
+async function refreshStats() {
+    const s = await isl.getRegisterStats();
+    document.getElementById('reg-total').textContent = s.total;
+    document.getElementById('reg-next').textContent  = s.nextSerial;
+}
+
+// Flash
+async function flash() {
+    if (flashing) return;
+    const port = document.getElementById('port-sel').value;
+    const baud = document.getElementById('baud-sel').value;
+    if (!port)        { log('✗ No serial port selected', 'e'); return; }
+    if (!selFirmware) { log('✗ No firmware file selected', 'e'); return; }
+    if (!curSerial)   { log('✗ Serial number not generated', 'e'); return; }
+
+    flashing = true;
+    setStatus('busy', 'Flashing...');
+    setBtns(true);
+    startProg();
+
+    log('', 'm');
+    log('══════════════════════════════════════════', 'm');
+    log(`  FLASH  ${new Date().toLocaleTimeString()}`, 'i');
+    log('══════════════════════════════════════════', 'm');
+    if (loadedConfig) {
+        log(`Door:   ${loadedConfig.device?.door_name || '—'}`, 'h');
+        log(`Site:   ${loadedConfig.device?.site_name || '—'}`, 'h');
+        log(`URL:    ${loadedConfig.api?.url || '—'}`, 'h');
+    }
+
+    const result = await isl.flashFirmware({
+        port, baudRate: parseInt(baud),
+        firmwarePath: selFirmware,
+        boardType:    selBoard,
+        serial:       curSerial,
+        apPassword:   curAPPwd,
+        // From loaded .islkey config (empty if none loaded)
+        apiUrl:    loadedConfig?.api?.url        || '',
+        apiToken:  loadedConfig?.api?.token      || '',
+        doorName:  loadedConfig?.device?.door_name || '',
+        siteCode:  loadedConfig?.device?.site_code || '',
+        // WiFi entered/loaded at flash time (blank => device uses its setup AP)
+        wifiSsid:     document.getElementById('wifi-ssid').value.trim(),
+        wifiPassword: document.getElementById('wifi-pass').value,
+    });
+
+    stopProg(result.ok);
+    flashing = false;
+    setBtns(false);
+
+    if (result.ok) {
+        setStatus('ready', `Flashed  ${result.serial}`);
+        log('', 'm');
+        log('╔══════════════════════════════════╗', 's');
+        log(`║  UNIT FLASHED SUCCESSFULLY       ║`, 's');
+        log(`║  Serial:  ${result.serial.padEnd(21)}║`, 's');
+        log(`║  AP Pwd:  ${result.apPassword.padEnd(21)}║`, 's');
+        log('╚══════════════════════════════════╝', 's');
+        // Generate fresh serial for next unit
+        await newSerial();
+        await refreshStats();
+    } else {
+        setStatus('error', 'Flash failed');
+        log(`✗ ${result.error}`, 'e');
+        log('Hold BOOT + press RESET to enter flash mode', 'm');
+    }
+}
+
+// Erase
+async function eraseFlash() {
+    if (flashing) return;
+    const port = document.getElementById('port-sel').value;
+    if (!port) { log('✗ No port selected', 'e'); return; }
+    if (!confirm('Erase all flash? This wipes firmware and configuration.')) return;
+    flashing = true;
+    setBtns(true);
+    setStatus('busy', 'Erasing flash...');
+    const r = await isl.eraseFlash({ port });
+    flashing = false;
+    setBtns(false);
+    if (r.ok) setStatus('idle', 'Flash erased — ready to flash');
+    else { setStatus('error', 'Erase failed'); log(`✗ ${r.error}`, 'e'); }
+}
+
+// Log
+function log(text, type = 'i') {
+    const t = document.getElementById('terminal');
+    const d = document.createElement('div');
+    if (text.includes('Writing at') || text.includes('%')) type = 'p';
+    if (text.startsWith('✓')) type = 's';
+    if (text.startsWith('✗') || text.toLowerCase().includes('error')) type = 'e';
+    if (text.includes('Connecting') || text.includes('Detecting')) type = 'a';
+    d.className = `l ${type}`;
+    d.textContent = text;
+    t.appendChild(d);
+    t.scrollTop = t.scrollHeight;
+}
+
+function clearLog() { document.getElementById('terminal').innerHTML = ''; setStatus('idle','Log cleared'); }
+
+// Status
+function setStatus(state, text) {
+    document.getElementById('dot').className = `dot ${state}`;
+    document.getElementById('status-text').textContent = text;
+}
+function setBtns(d) {
+    document.getElementById('flash-btn').disabled = d;
+    document.getElementById('erase-btn').disabled = d;
+}
+
+// Progress
+let progTimer;
+function startProg() {
+    const w = document.getElementById('prog-wrap');
+    const b = document.getElementById('prog-bar');
+    w.classList.add('show');
+    b.style.background = 'var(--accent)';
+    b.style.width = '0%';
+    let p = 0;
+    progTimer = setInterval(() => {
+        if (p < 88) { p += Math.random() * 3.5; b.style.width = p + '%'; }
+    }, 350);
+}
+function stopProg(ok) {
+    clearInterval(progTimer);
+    const b = document.getElementById('prog-bar');
+    b.style.width = '100%';
+    b.style.background = ok ? 'var(--green)' : 'var(--red)';
+    setTimeout(() => {
+        document.getElementById('prog-wrap').classList.remove('show');
+        b.style.background = 'var(--accent)';
+    }, 2500);
+}
+
+// Flash log stream
+isl.onFlashLog(line => {
+    let t = 'i';
+    if (line.includes('%') || line.includes('Writing')) t = 'p';
+    if (line.startsWith('✓'))  t = 's';
+    if (line.startsWith('✗') || line.toLowerCase().includes('error')) t = 'e';
+    if (line.includes('Serial:') || line.includes('AP Pass:')) t = 'h';
+    log(line, t);
+});
+
+// Init
+(async () => {
+    await loadPorts();
+    await loadFirmware();
+    await newSerial();
+    await refreshStats();
+})();
+</script>
+</body>
+</html>

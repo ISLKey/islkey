@@ -1,0 +1,37 @@
+{
+  "islkey_config_version": "1.0",
+  "generated_at": "2026-06-15T22:30:00Z",
+  "generated_by": "ISL Admin — admin@i-s-l.co.uk",
+  "expires_at": "2027-06-16T22:30:00Z",
+
+  "api": {
+    "url": "https://hawthorn.example.co.uk",
+    "token": "islk_d_a3f8c2e1b9d4e7f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8"
+  },
+
+  "device": {
+    "serial_number": "",
+    "board_type": "ttgo",
+    "door_name": "Main Entrance",
+    "site_name": "Hawthorn House",
+    "site_code": "HH001",
+    "door_id": 7,
+    "site_id": 3,
+    "customer_id": 12,
+    "zone": "perimeter"
+  },
+
+  "inputs": {
+    "input_1_function": 1, "input_1_logic": 1,
+    "input_2_function": 2, "input_2_logic": 0,
+    "input_3_function": 5, "input_3_logic": 1,
+    "input_4_function": 6, "input_4_logic": 1
+  },
+
+  "relays": {
+    "relay_1_function": 1, "relay_1_pulse_ms": 5000, "relay_1_active_high": true,
+    "relay_2_function": 0, "relay_2_pulse_ms": 2000, "relay_2_active_high": true
+  },
+
+  "door_behaviour": { "held_open_secs": 60, "forced_entry_detect": true }
+}

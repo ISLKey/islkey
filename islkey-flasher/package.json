@@ -1,0 +1,50 @@
+{
+  "name": "islkey-flasher",
+  "version": "1.3.0",
+  "description": "ISLKey Firmware Flashing Tool",
+  "author": "ISL Technologies <admin@i-s-l.co.uk>",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "co.uk.i-s-l.islkey-flasher",
+    "productName": "ISLKey Flasher",
+    "copyright": "Copyright © 2026 ISL Technologies",
+    "win": {
+      "target": ["nsis"],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ISLKey Flasher",
+      "deleteAppDataOnUninstall": false
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "assets/**/*",
+      "bin/**/*",
+      "firmware/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      { "from": "bin",      "to": "bin"      },
+      { "from": "firmware", "to": "firmware" },
+      { "from": "serials",  "to": "serials"  }
+    ]
+  },
+  "dependencies": {
+    "serialport": "^12.0.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  }
+}

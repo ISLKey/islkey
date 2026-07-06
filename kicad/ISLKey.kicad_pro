@@ -1,0 +1,31 @@
+{
+  "board": {
+    "design_settings": {},
+    "layer_presets": [],
+    "viewports": []
+  },
+  "boards": [],
+  "meta": {
+    "filename": "ISLKey.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "name": "Default",
+        "clearance": 0.2
+      }
+    ]
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "4372abef-a024-42d2-9081-66b1c2f43de9",
+      "Root"
+    ]
+  ],
+  "text_variables": {}
+}
