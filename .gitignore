@@ -32,3 +32,10 @@ Thumbs.db
 
 # ─── Generated design outputs (rebuildable from the .py generators) ────────
 _wiring_p*.png
+
+# KiCad generated renders / reports (regenerate from the gen/ scripts)
+kicad/*.svg
+kicad/*.net
+kicad/*_report.txt
+kicad/drc.txt
+kicad/gen/__pycache__/

@@ -7,15 +7,20 @@
   "boards": [],
   "meta": {
     "filename": "ISLKey.kicad_pro",
-    "version": 1
+    "version": 3
   },
   "net_settings": {
     "classes": [
       {
         "name": "Default",
-        "clearance": 0.2
+        "clearance": 0.2,
+        "track_width": 0.25
       }
     ]
+  },
+  "pcbnew": {
+    "last_paths": {},
+    "page_layout_descr_file": ""
   },
   "schematic": {
     "legacy_lib_dir": "",
@@ -23,7 +28,7 @@
   },
   "sheets": [
     [
-      "4372abef-a024-42d2-9081-66b1c2f43de9",
+      "ada7fb5c-d427-4e5c-a6b3-b498eefb0f80",
       "Root"
     ]
   ],
