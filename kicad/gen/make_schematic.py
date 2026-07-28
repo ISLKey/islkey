@@ -32,6 +32,8 @@ CAT = {
     "Connector:Screw_Terminal_01x03": ("Connector.kicad_sym", "Screw_Terminal_01x03"),
     "Device:Fuse":              ("Device.kicad_sym", "Fuse"),
     "Diode_Bridge:KBU4A":       ("Diode_Bridge.kicad_sym", "KBU4A"),
+    "Converter_DCDC:TEN20-2411WIN": ("Converter_DCDC.kicad_sym", "TEN20-2411WIN"),
+    "power:PWR_FLAG":           ("power.kicad_sym", "PWR_FLAG"),
 }
 
 FP = {  # lib_id -> footprint
@@ -51,9 +53,13 @@ FP = {  # lib_id -> footprint
     "Connector_Generic:Conn_01x04":     "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
     "Device:Fuse":              "Fuse:Fuseholder_Clip-5x20mm_Keystone_3512_Inline_P23.62x7.27mm_D1.02x1.57mm_Horizontal",
     "Diode_Bridge:KBU4A":       "Diode_THT:Diode_Bridge_Vishay_KBU",
+    "Converter_DCDC:TEN20-2411WIN": "Converter_DCDC:Converter_DCDC_TRACO_TEN20-xxxx_THT",
+    "power:PWR_FLAG":           "",   # schematic-only, excluded from board/BOM
 }
 # heavy-duty terminal footprint for the wide-input power terminals
 FP_MKDS3 = "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal"
+# Traco TSR-1 SIP-3 buck (pin1=Vin, pin2=GND, pin3=Vout) reuses the Conn_01x03 symbol
+FP_TSR1 = "Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT"
 
 # ── the design: list of parts ────────────────────────────────────────────────
 # each: (ref, lib_id, value, x, y, {pin_number: net or "NC"})
@@ -104,14 +110,18 @@ PARTS = [
     ("F1", "Device:Fuse", "T2A", 320, 60, {"1":"ACL","2":"ACIN1"}),
     ("BR1","Diode_Bridge:KBU4A", "KBU4M (4A)", 345, 70, {"1":"RAWP","2":"ACIN1","3":"ACN","4":"PGND"}),
     ("C4", "Device:C_Polarized", "100uF/100V", 370, 70, {"1":"RAWP","2":"PGND"}),
-    # Isolated DC-DC module (pluggable): Vin+/Vin- (primary) -> 12V/GND (secondary, isolated)
-    ("U3", "Connector_Generic:Conn_01x04", "ISO DCDC ->12V (e.g. Mornsun URB)", 395, 75,
-     {"1":"RAWP","2":"PGND","3":"GND","4":"+12V"}),
-    ("C5", "Device:C_Polarized", "100uF/25V", 420, 75, {"1":"+12V","2":"GND"}),
-    ("J11","Connector:Screw_Terminal_01x02", "12V OUT (lock/aux)", 420, 55, {"1":"+12V","2":"GND"}, FP_MKDS3),
-    # Buck module (pluggable): 12V -> 5V for the TTGO
-    ("U4", "Connector_Generic:Conn_01x03", "BUCK 12->5V (e.g. MP1584)", 395, 120,
-     {"1":"+12V","2":"GND","3":"+5V"}),
+    # Isolated DC-DC: 9-36V in (primary RAWP/PGND) -> isolated 12V out (secondary +12V/GND).
+    # Traco TEN 20WIN: pin4=Trim(NC), pin6=Remote On/Off (open=ON, positive logic).
+    ("U3", "Converter_DCDC:TEN20-2411WIN", "TEN20-2412WIN", 395, 75,
+     {"1":"RAWP","2":"PGND","3":"+12V","4":NC,"5":"GND","6":NC}),
+    ("C5", "Device:C_Polarized", "100uF/25V", 440, 75, {"1":"+12V","2":"GND"}),
+    # PWR_FLAGs: tell ERC the raw primary rails are driven (bridge diode outputs are 'passive')
+    ("#FLG1", "power:PWR_FLAG", "PWR_FLAG", 360, 92, {"1":"RAWP"}),
+    ("#FLG2", "power:PWR_FLAG", "PWR_FLAG", 380, 92, {"1":"PGND"}),
+    ("J11","Connector:Screw_Terminal_01x02", "12V OUT (lock/aux)", 440, 55, {"1":"+12V","2":"GND"}, FP_MKDS3),
+    # Buck 12V -> 5V for the TTGO (Traco TSR-1-2450, SIP-3: Vin/GND/Vout)
+    ("U4", "Connector_Generic:Conn_01x03", "TSR-1-2450", 395, 130,
+     {"1":"+12V","2":"GND","3":"+5V"}, FP_TSR1),
 
     # 5V/3V3 decoupling + power LED
     ("C1", "Device:C_Polarized", "100uF/16V", 300, 120, {"1":"+5V","2":"GND"}),
@@ -168,8 +178,9 @@ for entry in PARTS:
     manifest.append(dict(ref=ref, lib=lib, value=val, footprint=fpv,
                          uuid=sym_uuid, nets=netmap))
     body = []
+    onboard = "no" if fpv == "" else "yes"   # PWR_FLAG etc. are schematic-only
     body.append(f'  (symbol (lib_id "{lib}") (at {X} {Y} 0) (unit 1)')
-    body.append('    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)')
+    body.append(f'    (exclude_from_sim no) (in_bom {onboard}) (on_board {onboard}) (dnp no)')
     body.append(f'    (uuid {sym_uuid})')
     body.append(f'    (property "Reference" "{ref}" (at {X} {round(Y-18.0,2)} 0) (effects (font (size 1.27 1.27))))')
     body.append(f'    (property "Value" "{val}" (at {X} {round(Y+18.0,2)} 0) (effects (font (size 1.27 1.27))))')

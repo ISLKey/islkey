@@ -36,6 +36,8 @@ def get_net(name):
 
 placed = []
 for p in data["parts"]:
+    if not p["footprint"]:
+        continue   # schematic-only symbols (PWR_FLAG) have no footprint
     fp = load_fp(p["footprint"])
     if fp is None:
         print("FAILED to load", p["footprint"]); continue

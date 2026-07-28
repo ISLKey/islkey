@@ -27,5 +27,5 @@
 "R2,R4","10k","Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal","2"
 "R5","2k2","Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal","1"
 "U1","PC817","Package_DIP:DIP-4_W7.62mm","1"
-"U3","ISO DCDC ->12V (e.g. Mornsun URB)","Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical","1"
-"U4","BUCK 12->5V (e.g. MP1584)","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","1"
+"U3","TEN20-2412WIN","Converter_DCDC:Converter_DCDC_TRACO_TEN20-xxxx_THT","1"
+"U4","TSR-1-2450","Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT","1"
