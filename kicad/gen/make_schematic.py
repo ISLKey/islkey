@@ -35,6 +35,9 @@ CAT = {
     "Converter_DCDC:TEN20-2411WIN": ("Converter_DCDC.kicad_sym", "TEN20-2411WIN"),
     "power:PWR_FLAG":           ("power.kicad_sym", "PWR_FLAG"),
     "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": ("ISLKey.kicad_sym", "TTGO_ESP32_TDISPLAY_V1.1"),
+    "Timer_RTC:DS3231M":        ("Timer_RTC.kicad_sym", "DS3231M"),
+    "Device:Battery":           ("Device.kicad_sym", "Battery"),
+    "Device:Battery_Cell":      ("Device.kicad_sym", "Battery_Cell"),
 }
 
 FP = {  # lib_id -> footprint
@@ -57,6 +60,9 @@ FP = {  # lib_id -> footprint
     "Converter_DCDC:TEN20-2411WIN": "Converter_DCDC:Converter_DCDC_TRACO_TEN20-xxxx_THT",
     "power:PWR_FLAG":           "",   # schematic-only, excluded from board/BOM
     "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": "ISLKey:TTGO_ESP32_TDisplay_v1.1",
+    "Timer_RTC:DS3231M":        "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
+    "Device:Battery":           "Battery:BatteryHolder_Keystone_1042_1x18650",
+    "Device:Battery_Cell":      "Battery:BatteryHolder_Keystone_3002_1x2032",
 }
 # heavy-duty terminal footprint for the wide-input power terminals
 FP_MKDS3 = "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal"
@@ -70,6 +76,7 @@ PARTS = [
     # TTGO T-Display module (single 24-pad footprint; pad<->GPIO per GillesOdb lib)
     ("M1", "ISLKey:TTGO_ESP32_TDISPLAY_V1.1", "TTGO T-Display", 40, 100,
      {"7":"RLY1", "6":"RLY2", "5":"DOOR", "4":"FIRE_SENSE", "3":"TAMPER", "20":"EXIT",
+      "15":"I2C_SDA", "16":"I2C_SCL",   # GPIO21/22 (onboard 10k pull-ups) -> RTC
       "1":"+5V", "12":"+3V3", "24":"+3V3",
       "2":"GND", "13":"GND", "14":"GND", "22":"GND", "23":"GND"}),
 
@@ -132,9 +139,23 @@ PARTS = [
     ("D3", "Device:LED", "PWR", 300, 155, {"1":"D3K","2":"+5V"}),
     ("R6", "Device:R", "1k", 300, 175, {"1":"D3K","2":"GND"}),
 
-    # Battery passthrough (TTGO batt lead pads -> 18650 holder)
-    ("J13","Connector_Generic:Conn_01x02", "TTGO batt pads", 300, 210, {"1":"VBAT","2":"GND_BAT"}),
-    ("J14","Connector:Screw_Terminal_01x02", "18650 pack", 300, 235, {"1":"VBAT","2":"GND_BAT"}),
+    # Battery: TTGO batt lead pads -> on-board 2x18650 holders (parallel)
+    ("J13","Connector_Generic:Conn_01x02", "TTGO batt pads", 300, 205, {"1":"VBAT","2":"GND_BAT"}),
+    ("BT1","Device:Battery", "18650", 320, 205, {"1":"VBAT","2":"GND_BAT"}),
+    ("BT2","Device:Battery", "18650", 340, 205, {"1":"VBAT","2":"GND_BAT"}),
+
+    # RTC (DS3231M) on I2C GPIO21/22, CR2032-backed
+    ("U5", "Timer_RTC:DS3231M", "DS3231M", 380, 150,
+     {"2":"+3V3", "14":"RTC_VBAT", "15":"I2C_SDA", "16":"I2C_SCL",
+      "5":"GND","6":"GND","7":"GND","8":"GND","9":"GND","10":"GND","11":"GND","12":"GND","13":"GND",
+      "1":NC, "3":NC, "4":NC}),
+    ("C6", "Device:C", "100nF", 410, 150, {"1":"+3V3","2":"GND"}),
+    ("BT3","Device:Battery_Cell", "CR2032", 380, 180, {"1":"RTC_VBAT","2":"GND"}),
+
+    # PWR_FLAGs so ERC sees the DS3231 power-input rails driven
+    # (GND/+12V already driven by U3 TEN20 VOUT-/VOUT+, so no flag there)
+    ("#FLG3", "power:PWR_FLAG", "PWR_FLAG", 360, 140, {"1":"+3V3"}),
+    ("#FLG5", "power:PWR_FLAG", "PWR_FLAG", 400, 175, {"1":"RTC_VBAT"}),
 ]
 
 # ── build embedded lib_symbols (unique) ──────────────────────────────────────

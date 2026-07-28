@@ -73,11 +73,13 @@ PLACE = {
     "J3": (14, 24, 180), "J4": (14, 42, 180), "J5": (14, 60, 180),
     # TTGO T-Display module (single footprint), clear of the relay column
     "M1": (34, 30, 0),
-    # 5V/3V3 decoupling + power LED, below the module
-    "C1": (40, 70, 0), "C2": (48, 70, 0), "C3": (56, 70, 0),
-    "D3": (66, 70, 0), "R6": (74, 70, 0),
-    # 18650 pack terminal, left edge lower (J13 pads placed under M1, see below)
-    "J14": (14, 100, 180),
+    # 5V/3V3 decoupling + power LED, just below the module
+    "C1": (40, 48, 0), "C2": (48, 48, 0), "C3": (56, 48, 0),
+    "D3": (66, 48, 0), "R6": (74, 48, 0),
+    # RTC (DS3231) + coin cell backup, in the open area below the module
+    "U5": (45, 68, 0), "C6": (62, 68, 0), "BT3": (48, 90, 0),
+    # on-board 2x18650 holders (parallel), along the bottom
+    "BT1": (16, 150, 0), "BT2": (16, 176, 0),
     # relay ch1 (lock): RLY1 -> R1 -> Q1 -> K1 coil ; K1 contacts -> J6
     "R1": (96, 18, 0), "R2": (96, 30, 0), "Q1": (105, 25, 0),
     "D4": (114, 15, 0), "R7": (114, 27, 0), "K1": (132, 24, 0),
@@ -176,7 +178,33 @@ for i, (hx, hy) in enumerate(corners, 1):
         mh.Reference().SetVisible(False)
         mh.Value().SetVisible(False)
 
+# ── ground pour on both copper layers (GND) ──────────────────────────────────
+gnd = nets.get("GND")
+if gnd is not None and not os.environ.get("NO_POUR"):
+    inset = 0.5
+    rect = [(x0 + inset, y0 + inset), (x1 - inset, y0 + inset),
+            (x1 - inset, y1 - inset), (x0 + inset, y1 - inset)]
+    for layer in (pcbnew.F_Cu, pcbnew.B_Cu):
+        z = pcbnew.ZONE(board)
+        z.SetLayer(layer)
+        z.SetNetCode(gnd.GetNetCode())
+        z.SetAssignedPriority(0)
+        z.SetPadConnection(pcbnew.ZONE_CONNECTION_THERMAL)
+        outline = z.Outline()
+        outline.NewOutline()
+        for (px, py) in rect:
+            outline.Append(mm(px), mm(py))
+        board.Add(z)
+
 pcbnew.SaveBoard(OUT, board)
+# Fill zones on a RELOADED board — filling the freshly-built in-memory board
+# segfaults (no board setup yet); a loaded board fills cleanly.
+if gnd is not None and not os.environ.get("NO_POUR"):
+    b2 = pcbnew.LoadBoard(OUT)
+    b2.BuildConnectivity()
+    pcbnew.ZONE_FILLER(b2).Fill(b2.Zones())
+    pcbnew.SaveBoard(OUT, b2)
+
 print("WROTE", OUT)
 print("footprints=%d nets=%d board=%.1f x %.1f mm" %
       (len(placed), len(nets), x1 - x0, y1 - y0))
