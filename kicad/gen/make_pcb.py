@@ -76,8 +76,8 @@ PLACE = {
     # 5V/3V3 decoupling + power LED, below the module
     "C1": (40, 70, 0), "C2": (48, 70, 0), "C3": (56, 70, 0),
     "D3": (66, 70, 0), "R6": (74, 70, 0),
-    # battery passthrough, left edge lower
-    "J13": (14, 84, 180), "J14": (14, 102, 180),
+    # 18650 pack terminal, left edge lower (J13 pads placed under M1, see below)
+    "J14": (14, 100, 180),
     # relay ch1 (lock): RLY1 -> R1 -> Q1 -> K1 coil ; K1 contacts -> J6
     "R1": (96, 18, 0), "R2": (96, 30, 0), "Q1": (105, 25, 0),
     "D4": (114, 15, 0), "R7": (114, 27, 0), "K1": (132, 24, 0),
@@ -115,6 +115,15 @@ for fp, ref in placed:
         fp.SetOrientation(pcbnew.EDA_ANGLE(rot, pcbnew.DEGREES_T))
     track(fp.GetBoundingBox())
 
+# battery pads J13: centre them between M1's two header rows, where the TTGO
+# battery lead physically emerges (so the flying lead solders straight down)
+m1 = fp_by_ref.get("M1"); j13 = fp_by_ref.get("J13")
+if m1 and j13:
+    xs = [pad.GetPosition().x for pad in m1.Pads()]
+    ys = [pad.GetPosition().y for pad in m1.Pads()]
+    j13.SetPosition(pcbnew.VECTOR2I(sum(xs) // len(xs), sum(ys) // len(ys)))
+    track(j13.GetBoundingBox())
+
 # power row: walk left->right placing each bbox-left at the cursor
 cx = ROW_X0
 for ref in POWER_ROW:
@@ -130,7 +139,7 @@ for ref in POWER_ROW:
 # shelf-pack fallback for anything not explicitly placed
 cx2, cy2, rowh = MARGIN, 150.0, 0.0
 for fp, ref in placed:
-    if ref in PLACE or ref in POWER_ROW:
+    if ref in PLACE or ref in POWER_ROW or ref == "J13":
         continue
     fp.SetPosition(pcbnew.VECTOR2I(0, 0))
     bb = fp.GetBoundingBox()
