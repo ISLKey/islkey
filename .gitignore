@@ -42,3 +42,6 @@ kicad/gen/__pycache__/
 
 # KiCad local editor state
 kicad/*.kicad_prl
+
+# editor local history
+.history/
