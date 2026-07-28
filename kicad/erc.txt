@@ -1,15 +1,65 @@
-ERC report (2026-07-28T23:02:35, Encoding UTF8)
+ERC report (2026-07-28T23:20:42, Encoding UTF8)
 Report includes: Errors, Warnings
 
 ***** Sheet /
-[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
-    ; error
-    @(383.54 mm, 71.12 mm): Symbol U3 Pin 1 [VIN+, Power input, Line]
-[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
-    ; error
-    @(383.54 mm, 81.28 mm): Symbol U3 Pin 2 [VIN-, Power input, Line]
+[pin_to_pin]: Pins of type Unspecified and Unspecified are connected
+    ; warning
+    @(35.56 mm, 69.85 mm): Symbol M1 Pin 13 [GND, Unspecified, Line]
+    @(35.56 mm, 72.39 mm): Symbol M1 Pin 14 [GND, Unspecified, Line]
+[pin_to_pin]: Pins of type Unspecified and Unspecified are connected
+    ; warning
+    @(35.56 mm, 72.39 mm): Symbol M1 Pin 14 [GND, Unspecified, Line]
+    @(35.56 mm, 92.71 mm): Symbol M1 Pin 22 [GND, Unspecified, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(35.56 mm, 87.63 mm): Symbol M1 Pin 20 [GPIO13, Unspecified, Line]
+    @(35.56 mm, 200.66 mm): Symbol J3 Pin 1 [Pin_1, Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Unspecified are connected
+    ; warning
+    @(35.56 mm, 92.71 mm): Symbol M1 Pin 22 [GND, Unspecified, Line]
+    @(35.56 mm, 95.25 mm): Symbol M1 Pin 23 [GND, Unspecified, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(35.56 mm, 95.25 mm): Symbol M1 Pin 23 [GND, Unspecified, Line]
+    @(114.30 mm, 74.93 mm): Symbol R2 Pin 2 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(35.56 mm, 97.79 mm): Symbol M1 Pin 24 [3.3V, Unspecified, Line]
+    @(340.36 mm, 115.57 mm): Symbol C3 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Unspecified are connected
+    ; warning
+    @(63.50 mm, 69.85 mm): Symbol M1 Pin 12 [3.3V, Unspecified, Line]
+    @(35.56 mm, 97.79 mm): Symbol M1 Pin 24 [3.3V, Unspecified, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(63.50 mm, 82.55 mm): Symbol M1 Pin 7 [GPIO32, Unspecified, Line]
+    @(93.98 mm, 67.31 mm): Symbol R1 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(63.50 mm, 85.09 mm): Symbol M1 Pin 6 [GPIO33, Unspecified, Line]
+    @(93.98 mm, 181.61 mm): Symbol R3 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(63.50 mm, 87.63 mm): Symbol M1 Pin 5 [GPIO25, Unspecified, Line]
+    @(35.56 mm, 220.98 mm): Symbol J4 Pin 1 [Pin_1, Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(63.50 mm, 90.17 mm): Symbol M1 Pin 4 [GPIO26, Unspecified, Line]
+    @(256.54 mm, 86.36 mm): Symbol U1 Pin 4 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(63.50 mm, 92.71 mm): Symbol M1 Pin 3 [GPIO27, Unspecified, Line]
+    @(35.56 mm, 238.76 mm): Symbol J5 Pin 1 [Pin_1, Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Unspecified are connected
+    ; warning
+    @(63.50 mm, 95.25 mm): Symbol M1 Pin 2 [GND, Unspecified, Line]
+    @(35.56 mm, 95.25 mm): Symbol M1 Pin 23 [GND, Unspecified, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(63.50 mm, 97.79 mm): Symbol M1 Pin 1 [5V, Unspecified, Line]
+    @(125.73 mm, 129.54 mm): Symbol D1 Pin 1 [K, Passive, Line]
 
- ** ERC messages: 2  Errors 2  Warnings 0
+ ** ERC messages: 14  Errors 0  Warnings 14
 
  ** Ignored checks:
     - Global label only appears once in the schematic

@@ -17,8 +17,11 @@ MH_FP = ("MountingHole", "MountingHole_3.2mm_M3")  # lib, name
 def mm(v):
     return pcbnew.FromMM(v)
 
+LOCAL_FP = r"C:\src\islkey\kicad\lib"   # project-local .pretty (ISLKey)
 def load_fp(fpid):
     lib, name = fpid.split(":", 1)
+    if lib == "ISLKey":
+        return pcbnew.FootprintLoad(os.path.join(LOCAL_FP, "ISLKey.pretty"), name)
     return pcbnew.FootprintLoad(os.path.join(FPBASE, lib + ".pretty"), name)
 
 data = json.load(open(MANIFEST, encoding="utf-8"))
@@ -60,27 +63,87 @@ for p in data["parts"]:
             pad.SetNet(get_net(net))
     placed.append((fp, p["ref"]))
 
-# ── shelf-pack so nothing overlaps ───────────────────────────────────────────
+# ── routing-aware floorplan: ref -> (x_mm, y_mm, rotation_deg) ────────────────
+# Flow: field terminals on edges; TTGO centre; each relay driver->coil->contacts
+# ->terminal in a line; power chain L->R with the isolation barrier (U3) splitting
+# primary (RAWP/PGND, left) from secondary (12V/5V, right). TTGO_ROW = the two
+# 1x12 header rows' centre-to-centre spacing -- VERIFY against the physical module.
+PLACE = {
+    # field inputs, left edge
+    "J3": (14, 24, 180), "J4": (14, 42, 180), "J5": (14, 60, 180),
+    # TTGO T-Display module (single footprint), clear of the relay column
+    "M1": (34, 30, 0),
+    # 5V/3V3 decoupling + power LED, below the module
+    "C1": (40, 70, 0), "C2": (48, 70, 0), "C3": (56, 70, 0),
+    "D3": (66, 70, 0), "R6": (74, 70, 0),
+    # battery passthrough, left edge lower
+    "J13": (14, 84, 180), "J14": (14, 102, 180),
+    # relay ch1 (lock): RLY1 -> R1 -> Q1 -> K1 coil ; K1 contacts -> J6
+    "R1": (96, 18, 0), "R2": (96, 30, 0), "Q1": (105, 25, 0),
+    "D4": (114, 15, 0), "R7": (114, 27, 0), "K1": (132, 24, 0),
+    "D1": (108, 40, 0), "J6": (162, 24, 0),
+    # relay ch2 (aux)
+    "R3": (96, 56, 0), "R4": (96, 68, 0), "Q2": (105, 63, 0),
+    "D5": (114, 53, 0), "R8": (114, 65, 0), "K2": (132, 62, 0),
+    "D2": (108, 78, 0), "J7": (162, 62, 0),
+    # fire monitor: GPIO26 <- U1 <- fire terminal ; COM<->fire jumper J9
+    "R5": (92, 88, 0), "U1": (104, 88, 0), "J9": (128, 88, 0), "J8": (162, 88, 0),
+}
+# power chain, placed left->right auto-spaced by real footprint width (F1/BR1/U3
+# are wide): IN -> F1 -> BR1 -> C4 -> [U3 isolation barrier] -> C5 -> U4 -> 12V out
+POWER_ROW = ["J10", "F1", "BR1", "C4", "U3", "C5", "U4", "J11"]
+ROW_Y, ROW_X0, ROW_GAP = 125.0, 10.0, 4.0
+
+fp_by_ref = {ref: fp for fp, ref in placed}
 MARGIN = 8.0
-GAP = 2.5
-MAXW = 170.0
-cx, cy, rowh = MARGIN, MARGIN, 0.0
 maxx = maxy = 0.0
+minx = miny = 1e9
+def track(bb):
+    global maxx, maxy, minx, miny
+    maxx = max(maxx, pcbnew.ToMM(bb.GetRight())); maxy = max(maxy, pcbnew.ToMM(bb.GetBottom()))
+    minx = min(minx, pcbnew.ToMM(bb.GetLeft())); miny = min(miny, pcbnew.ToMM(bb.GetTop()))
+
+# fixed placements
 for fp, ref in placed:
+    if ref not in PLACE:
+        continue
+    x, y, rot = PLACE[ref]
+    fp.SetPosition(pcbnew.VECTOR2I(mm(x), mm(y)))
+    try:
+        fp.SetOrientationDegrees(rot)
+    except Exception:
+        fp.SetOrientation(pcbnew.EDA_ANGLE(rot, pcbnew.DEGREES_T))
+    track(fp.GetBoundingBox())
+
+# power row: walk left->right placing each bbox-left at the cursor
+cx = ROW_X0
+for ref in POWER_ROW:
+    fp = fp_by_ref[ref]
     fp.SetPosition(pcbnew.VECTOR2I(0, 0))
-    bb = fp.GetBoundingBox()  # includes silk
+    bb = fp.GetBoundingBox()
     w = pcbnew.ToMM(bb.GetWidth()); h = pcbnew.ToMM(bb.GetHeight())
-    ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())  # bbox min at origin placement
-    if cx + w > MAXW:
-        cx = MARGIN; cy += rowh + GAP; rowh = 0.0
-    # place so bbox min lands at (cx, cy)
-    fp.SetPosition(pcbnew.VECTOR2I(mm(cx - ox), mm(cy - oy)))
-    cx += w + GAP
-    rowh = max(rowh, h)
-    maxx = max(maxx, cx); maxy = max(maxy, cy + rowh)
+    ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
+    fp.SetPosition(pcbnew.VECTOR2I(mm(cx - ox), mm(ROW_Y - h / 2 - oy)))
+    track(fp.GetBoundingBox())
+    cx += w + ROW_GAP
+
+# shelf-pack fallback for anything not explicitly placed
+cx2, cy2, rowh = MARGIN, 150.0, 0.0
+for fp, ref in placed:
+    if ref in PLACE or ref in POWER_ROW:
+        continue
+    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
+    bb = fp.GetBoundingBox()
+    w = pcbnew.ToMM(bb.GetWidth()); h = pcbnew.ToMM(bb.GetHeight())
+    ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
+    if cx2 + w > 170.0:
+        cx2 = MARGIN; cy2 += rowh + 2.5; rowh = 0.0
+    fp.SetPosition(pcbnew.VECTOR2I(mm(cx2 - ox), mm(cy2 - oy)))
+    cx2 += w + 2.5; rowh = max(rowh, h)
+    track(fp.GetBoundingBox())
 
 # ── board outline (Edge.Cuts rectangle) ──────────────────────────────────────
-x0, y0 = MARGIN - MARGIN, MARGIN - MARGIN
+x0, y0 = minx - MARGIN, miny - MARGIN
 x1, y1 = maxx + MARGIN, maxy + MARGIN
 def edge(xa, ya, xb, yb):
     s = pcbnew.PCB_SHAPE(board)

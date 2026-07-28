@@ -34,6 +34,7 @@ CAT = {
     "Diode_Bridge:KBU4A":       ("Diode_Bridge.kicad_sym", "KBU4A"),
     "Converter_DCDC:TEN20-2411WIN": ("Converter_DCDC.kicad_sym", "TEN20-2411WIN"),
     "power:PWR_FLAG":           ("power.kicad_sym", "PWR_FLAG"),
+    "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": ("ISLKey.kicad_sym", "TTGO_ESP32_TDISPLAY_V1.1"),
 }
 
 FP = {  # lib_id -> footprint
@@ -55,6 +56,7 @@ FP = {  # lib_id -> footprint
     "Diode_Bridge:KBU4A":       "Diode_THT:Diode_Bridge_Vishay_KBU",
     "Converter_DCDC:TEN20-2411WIN": "Converter_DCDC:Converter_DCDC_TRACO_TEN20-xxxx_THT",
     "power:PWR_FLAG":           "",   # schematic-only, excluded from board/BOM
+    "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": "ISLKey:TTGO_ESP32_TDisplay_v1.1",
 }
 # heavy-duty terminal footprint for the wide-input power terminals
 FP_MKDS3 = "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal"
@@ -65,11 +67,11 @@ FP_TSR1 = "Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT"
 # each: (ref, lib_id, value, x, y, {pin_number: net or "NC"})
 NC = "NC"
 PARTS = [
-    # TTGO module headers (module plugs in here)
-    ("J1", "Connector_Generic:Conn_01x12", "TTGO Left",  40, 70,
-     {"1":"GND","2":"GND","3":NC,"4":NC,"5":NC,"6":NC,"7":NC,"8":"EXIT","9":NC,"10":"GND","11":"GND","12":"+3V3"}),
-    ("J2", "Connector_Generic:Conn_01x12", "TTGO Right", 40, 135,
-     {"1":"+3V3","2":NC,"3":NC,"4":NC,"5":NC,"6":"RLY1","7":"RLY2","8":"DOOR","9":"FIRE_SENSE","10":"TAMPER","11":"GND","12":"+5V"}),
+    # TTGO T-Display module (single 24-pad footprint; pad<->GPIO per GillesOdb lib)
+    ("M1", "ISLKey:TTGO_ESP32_TDISPLAY_V1.1", "TTGO T-Display", 40, 100,
+     {"7":"RLY1", "6":"RLY2", "5":"DOOR", "4":"FIRE_SENSE", "3":"TAMPER", "20":"EXIT",
+      "1":"+5V", "12":"+3V3", "24":"+3V3",
+      "2":"GND", "13":"GND", "14":"GND", "22":"GND", "23":"GND"}),
 
     # Field inputs
     ("J3", "Connector:Screw_Terminal_01x02", "Exit btn",   40, 200, {"1":"EXIT","2":"GND"}),

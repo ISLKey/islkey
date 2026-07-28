@@ -4,6 +4,7 @@ Used by the ISLKey schematic generator and by test/render harnesses.
 import os, re, uuid
 
 KICAD_SYM = r"C:\Program Files\KiCad\10.0\share\kicad\symbols"
+LOCAL_SYM = r"C:\src\islkey\kicad\lib"   # project-local symbol libs (e.g. ISLKey.kicad_sym)
 _cache = {}
 
 def U():
@@ -11,8 +12,14 @@ def U():
 
 def _read(lib):
     if lib not in _cache:
-        with open(os.path.join(KICAD_SYM, lib), encoding="utf-8") as f:
-            _cache[lib] = f.read()
+        for base in (LOCAL_SYM, KICAD_SYM):
+            p = os.path.join(base, lib)
+            if os.path.exists(p):
+                with open(p, encoding="utf-8") as f:
+                    _cache[lib] = f.read()
+                break
+        else:
+            raise FileNotFoundError(lib)
     return _cache[lib]
 
 def extract_symbol(lib, name):
