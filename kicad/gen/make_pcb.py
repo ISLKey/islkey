@@ -47,6 +47,7 @@ for p in data["parts"]:
     board.Add(fp)
     fp.SetReference(p["ref"])
     fp.SetValue(p["value"])
+    fp.Value().SetVisible(False)   # hide value silk (keeps refs; declutters + shrinks bbox)
     # link to schematic symbol
     try:
         kp = pcbnew.KIID_PATH()
@@ -63,41 +64,25 @@ for p in data["parts"]:
             pad.SetNet(get_net(net))
     placed.append((fp, p["ref"]))
 
-# ── routing-aware floorplan: ref -> (x_mm, y_mm, rotation_deg) ────────────────
-# Flow: field terminals on edges; TTGO centre; each relay driver->coil->contacts
-# ->terminal in a line; power chain L->R with the isolation barrier (U3) splitting
-# primary (RAWP/PGND, left) from secondary (12V/5V, right). TTGO_ROW = the two
-# 1x12 header rows' centre-to-centre spacing -- VERIFY against the physical module.
-PLACE = {
-    # field inputs, left edge
-    "J3": (14, 24, 180), "J4": (14, 42, 180), "J5": (14, 60, 180),
-    # TTGO T-Display module (single footprint), clear of the relay column
-    "M1": (34, 30, 0),
-    # 5V/3V3 decoupling + power LED, just below the module
-    "C1": (40, 48, 0), "C2": (48, 48, 0), "C3": (56, 48, 0),
-    "D3": (66, 48, 0), "R6": (74, 48, 0),
-    # RTC (DS3231) + coin cell backup, in the open area below the module
-    "U5": (45, 68, 0), "C6": (62, 68, 0), "BT3": (48, 90, 0),
-    # on-board 2x18650 holders (parallel), along the bottom
-    "BT1": (16, 150, 0), "BT2": (16, 176, 0),
-    # relay ch1 (lock): RLY1 -> R1 -> Q1 -> K1 coil ; K1 contacts -> J6
-    "R1": (96, 18, 0), "R2": (96, 30, 0), "Q1": (105, 25, 0),
-    "D4": (114, 15, 0), "R7": (114, 27, 0), "K1": (132, 24, 0),
-    "D1": (108, 40, 0), "J6": (162, 24, 0),
-    # relay ch2 (aux)
-    "R3": (96, 56, 0), "R4": (96, 68, 0), "Q2": (105, 63, 0),
-    "D5": (114, 53, 0), "R8": (114, 65, 0), "K2": (132, 62, 0),
-    "D2": (108, 78, 0), "J7": (162, 62, 0),
-    # fire monitor: GPIO26 <- U1 <- fire terminal ; COM<->fire jumper J9
-    "R5": (92, 88, 0), "U1": (104, 88, 0), "J9": (128, 88, 0), "J8": (162, 88, 0),
-}
-# power chain, placed left->right auto-spaced by real footprint width (F1/BR1/U3
-# are wide): IN -> F1 -> BR1 -> C4 -> [U3 isolation barrier] -> C5 -> U4 -> 12V out
-POWER_ROW = ["J10", "F1", "BR1", "C4", "U3", "C5", "U4", "J11"]
-ROW_Y, ROW_X0, ROW_GAP = 125.0, 10.0, 4.0
-
+# ── tight placement: pack parts edge-to-edge in functional order ──────────────
+# Row-pack at a fixed width (the 78mm 18650 holders set the floor) with small
+# gaps, keeping related parts adjacent. Priority here is a SMALL board; fine-
+# tune positions/rotations in the GUI before routing.
+ORDER = [
+    "J3", "J4", "J5",                                   # field inputs
+    "M1",                                               # TTGO module
+    "C1", "C2", "C3", "D3", "R6",                       # 5V/3V3 decoupling + LED
+    "U5", "C6", "BT3",                                  # RTC + coin cell
+    "R1", "R2", "Q1", "D1", "D4", "R7", "K1", "J6",     # relay ch1 (lock)
+    "R3", "R4", "Q2", "D2", "D5", "R8", "K2", "J7",     # relay ch2 (aux)
+    "R5", "U1", "J9", "J8",                             # fire monitor
+    "J10", "F1", "BR1", "C4", "U3", "C5", "U4", "J11",  # power chain
+    "BT1", "BT2",                                       # 2x18650 holders
+]
 fp_by_ref = {ref: fp for fp, ref in placed}
-MARGIN = 8.0
+ORDER += [ref for _f, ref in placed if ref not in set(ORDER) and ref != "J13"]
+
+W, GAP, MARGIN = 130.0, 2.0, 6.0
 maxx = maxy = 0.0
 minx = miny = 1e9
 def track(bb):
@@ -105,53 +90,52 @@ def track(bb):
     maxx = max(maxx, pcbnew.ToMM(bb.GetRight())); maxy = max(maxy, pcbnew.ToMM(bb.GetBottom()))
     minx = min(minx, pcbnew.ToMM(bb.GetLeft())); miny = min(miny, pcbnew.ToMM(bb.GetTop()))
 
-# fixed placements
-for fp, ref in placed:
-    if ref not in PLACE:
+# measure every part, then First-Fit-Decreasing-Height shelf pack (parts of
+# similar height share a row -> minimal wasted vertical space -> compact board)
+BATTERIES = ("BT1", "BT2")   # 78mm holders -> own block, not mixed into the pack
+items = []
+for ref in ORDER:
+    fp = fp_by_ref.get(ref)
+    if fp is None or ref in BATTERIES:
         continue
-    x, y, rot = PLACE[ref]
-    fp.SetPosition(pcbnew.VECTOR2I(mm(x), mm(y)))
     try:
-        fp.SetOrientationDegrees(rot)
+        fp.SetOrientationDegrees(0)
     except Exception:
-        fp.SetOrientation(pcbnew.EDA_ANGLE(rot, pcbnew.DEGREES_T))
-    track(fp.GetBoundingBox())
+        pass
+    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
+    bb = fp.GetBoundingBox(False, False)
+    items.append((fp, pcbnew.ToMM(bb.GetWidth()), pcbnew.ToMM(bb.GetHeight()),
+                  pcbnew.ToMM(bb.GetX()), pcbnew.ToMM(bb.GetY())))
+items.sort(key=lambda it: -it[2])   # tallest first
 
-# battery pads J13: centre them between M1's two header rows, where the TTGO
-# battery lead physically emerges (so the flying lead solders straight down)
+cx, cy, rowh = MARGIN, MARGIN, 0.0
+for fp, w, h, ox, oy in items:
+    if cx > MARGIN and cx + w > W + MARGIN:      # wrap to next shelf
+        cx = MARGIN; cy += rowh + GAP; rowh = 0.0
+    fp.SetPosition(pcbnew.VECTOR2I(mm(cx - ox), mm(cy - oy)))
+    track(fp.GetBoundingBox(False, False))
+    cx += w + GAP; rowh = max(rowh, h)
+
+# batteries: dedicated block stacked below the circuit (each holder ~78mm long)
+by = cy + rowh + GAP
+for ref in BATTERIES:
+    fp = fp_by_ref.get(ref)
+    if fp is None:
+        continue
+    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
+    bb = fp.GetBoundingBox(False, False)
+    h = pcbnew.ToMM(bb.GetHeight()); ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
+    fp.SetPosition(pcbnew.VECTOR2I(mm(MARGIN - ox), mm(by - oy)))
+    track(fp.GetBoundingBox(False, False))
+    by += h + GAP
+
+# battery pads J13: centre them between M1's two header rows (TTGO batt lead)
 m1 = fp_by_ref.get("M1"); j13 = fp_by_ref.get("J13")
 if m1 and j13:
     xs = [pad.GetPosition().x for pad in m1.Pads()]
     ys = [pad.GetPosition().y for pad in m1.Pads()]
     j13.SetPosition(pcbnew.VECTOR2I(sum(xs) // len(xs), sum(ys) // len(ys)))
     track(j13.GetBoundingBox())
-
-# power row: walk left->right placing each bbox-left at the cursor
-cx = ROW_X0
-for ref in POWER_ROW:
-    fp = fp_by_ref[ref]
-    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
-    bb = fp.GetBoundingBox()
-    w = pcbnew.ToMM(bb.GetWidth()); h = pcbnew.ToMM(bb.GetHeight())
-    ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
-    fp.SetPosition(pcbnew.VECTOR2I(mm(cx - ox), mm(ROW_Y - h / 2 - oy)))
-    track(fp.GetBoundingBox())
-    cx += w + ROW_GAP
-
-# shelf-pack fallback for anything not explicitly placed
-cx2, cy2, rowh = MARGIN, 150.0, 0.0
-for fp, ref in placed:
-    if ref in PLACE or ref in POWER_ROW or ref == "J13":
-        continue
-    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
-    bb = fp.GetBoundingBox()
-    w = pcbnew.ToMM(bb.GetWidth()); h = pcbnew.ToMM(bb.GetHeight())
-    ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
-    if cx2 + w > 170.0:
-        cx2 = MARGIN; cy2 += rowh + 2.5; rowh = 0.0
-    fp.SetPosition(pcbnew.VECTOR2I(mm(cx2 - ox), mm(cy2 - oy)))
-    cx2 += w + 2.5; rowh = max(rowh, h)
-    track(fp.GetBoundingBox())
 
 # ── board outline (Edge.Cuts rectangle) ──────────────────────────────────────
 x0, y0 = minx - MARGIN, miny - MARGIN
@@ -168,7 +152,7 @@ for a in [(x0, y0, x1, y0), (x1, y0, x1, y1), (x1, y1, x0, y1), (x0, y1, x0, y0)
     edge(*a)
 
 # ── 4 M3 mounting holes just inside the corners ──────────────────────────────
-corners = [(x0 + 4, y0 + 4), (x1 - 4, y0 + 4), (x1 - 4, y1 - 4), (x0 + 4, y1 - 4)]
+corners = [(x0 + 3, y0 + 3), (x1 - 3, y0 + 3), (x1 - 3, y1 - 3), (x0 + 3, y1 - 3)]
 for i, (hx, hy) in enumerate(corners, 1):
     mh = pcbnew.FootprintLoad(os.path.join(FPBASE, MH_FP[0] + ".pretty"), MH_FP[1])
     if mh:
