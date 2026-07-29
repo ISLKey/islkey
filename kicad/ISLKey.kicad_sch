@@ -3,8 +3,8 @@
   (generator "islkey_gen") (generator_version "10.0")
   (uuid 54800761-4b59-40c1-8d68-0aca20583d07)
   (paper "A3")
-  (title_block (title "ISLKey TTGO Carrier Board") (company "ISL Technologies") (rev "2.0.0")
-    (comment 1 "Inputs, dual onboard relays w/ status LEDs, monitored fire link, backup-power passthrough"))
+  (title_block (title "ISLKey 1-MDC") (company "ISL Technologies") (rev "1.0.0")
+    (comment 1 "1-MDC: TTGO controller - 4 inputs, dual relays, monitored fire link, RTC, wide-input isolated PSU"))
   (lib_symbols
 (symbol "ISLKey:TTGO_ESP32_TDISPLAY_V1.1"
 		(pin_names
