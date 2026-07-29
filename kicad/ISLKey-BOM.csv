@@ -27,6 +27,6 @@
 "R2,R4","10k","Resistor_SMD:R_0805_2012Metric","2"
 "R5","2k2","Resistor_SMD:R_0805_2012Metric","1"
 "U1","PC817","Package_DIP:DIP-4_W7.62mm","1"
-"U3","TEN20-2412WIN","ISLKey:TEN20_TRACO","1"
+"U3","TMR10-2412WIR","Converter_DCDC:Converter_DCDC_TRACO_TMR10-24xxWIR_48xxWIR_72xxWIR_THT","1"
 "U4","TSR-1-2450","Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT","1"
 "U5","DS3231M","Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm","1"

@@ -32,7 +32,7 @@ CAT = {
     "Connector:Screw_Terminal_01x03": ("Connector.kicad_sym", "Screw_Terminal_01x03"),
     "Device:Fuse":              ("Device.kicad_sym", "Fuse"),
     "Diode_Bridge:KBU4A":       ("Diode_Bridge.kicad_sym", "KBU4A"),
-    "Converter_DCDC:TEN20-2411WIN": ("Converter_DCDC.kicad_sym", "TEN20-2411WIN"),
+    "Converter_DCDC:TMR10-2410WIR": ("Converter_DCDC.kicad_sym", "TMR10-2410WIR"),
     "power:PWR_FLAG":           ("power.kicad_sym", "PWR_FLAG"),
     "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": ("ISLKey.kicad_sym", "TTGO_ESP32_TDISPLAY_V1.1"),
     "Timer_RTC:DS3231M":        ("Timer_RTC.kicad_sym", "DS3231M"),
@@ -57,7 +57,7 @@ FP = {  # lib_id -> footprint
     "Connector_Generic:Conn_01x04":     "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
     "Device:Fuse":              "Fuse:Fuseholder_Clip-5x20mm_Keystone_3512_Inline_P23.62x7.27mm_D1.02x1.57mm_Horizontal",
     "Diode_Bridge:KBU4A":       "Diode_THT:Diode_Bridge_Vishay_KBU",
-    "Converter_DCDC:TEN20-2411WIN": "ISLKey:TEN20_TRACO",   # local copy w/ corrected courtyard
+    "Converter_DCDC:TMR10-2410WIR": "Converter_DCDC:Converter_DCDC_TRACO_TMR10-24xxWIR_48xxWIR_72xxWIR_THT",
     "power:PWR_FLAG":           "",   # schematic-only, excluded from board/BOM
     "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": "ISLKey:TTGO_ESP32_TDisplay_v1.1",
     "Timer_RTC:DS3231M":        "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
@@ -120,10 +120,10 @@ PARTS = [
     ("BR1","Diode_Bridge:KBU4A", "KBU4M (4A)", 345, 70, {"1":"RAWP","2":"ACIN1","3":"ACN","4":"PGND"}),
     ("C4", "Device:C_Polarized", "100uF/100V", 370, 70, {"1":"RAWP","2":"PGND"},
      "Capacitor_SMD:CP_Elec_10x10.5"),   # 100V bulk cap needs a bigger SMD can
-    # Isolated DC-DC: 9-36V in (primary RAWP/PGND) -> isolated 12V out (secondary +12V/GND).
-    # Traco TEN 20WIN: pin4=Trim(NC), pin6=Remote On/Off (open=ON, positive logic).
-    ("U3", "Converter_DCDC:TEN20-2411WIN", "TEN20-2412WIN", 395, 75,
-     {"1":"RAWP","2":"PGND","3":"+12V","4":NC,"5":"GND","6":NC}),
+    # Isolated DC-DC: 9-36V in (primary RAWP/PGND) -> isolated 12V/10W out (secondary +12V/GND).
+    # Traco TMR10-2412WIR: 1=-Vin,2=+Vin,3=Remote(open=ON),6=+Vout,7=-Vout,9/10=Case->GND.
+    ("U3", "Converter_DCDC:TMR10-2410WIR", "TMR10-2412WIR", 395, 75,
+     {"1":"PGND","2":"RAWP","3":NC,"6":"+12V","7":"GND","8":NC,"9":NC,"10":NC}),
     ("C5", "Device:C_Polarized", "100uF/25V", 440, 75, {"1":"+12V","2":"GND"}),
     # PWR_FLAGs: tell ERC the raw primary rails are driven (bridge diode outputs are 'passive')
     ("#FLG1", "power:PWR_FLAG", "PWR_FLAG", 360, 92, {"1":"RAWP"}),
