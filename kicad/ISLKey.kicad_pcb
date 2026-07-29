@@ -364,6 +364,7 @@
 		(property "Reference" "J10"
 			(at 2.54 -7.02 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "38b30b07-fdc2-40ab-a6d4-71cd92803eb4")
 			(effects
 				(font
@@ -1156,6 +1157,7 @@
 		(property "Reference" "J6"
 			(at 5.08 -6.32 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "b306a463-3cf8-4b4a-8769-5696783be91b")
 			(effects
 				(font
@@ -2274,7 +2276,7 @@
 			(uuid "9f50009e-5b8a-40ab-b054-84b48ebd6bbf")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuseholder_Clip-5x20mm_Keystone_3512_Inline_P23.62x7.27mm_D1.02x1.57mm_Horizontal.step"
+		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuseholder_Cylinder-5x20mm_Schurter_0031_8201_Horizontal_Open.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2295,6 +2297,7 @@
 		(property "Reference" "J3"
 			(at 2.54 -6.32 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "22831c38-c3ce-44f8-9c77-dc95edf0ee59")
 			(effects
 				(font
@@ -3173,6 +3176,7 @@
 		(property "Reference" "J8"
 			(at 2.54 -6.32 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "a028b0e1-f873-4cea-a5e3-cbf19073769b")
 			(effects
 				(font
@@ -3527,6 +3531,7 @@
 		(property "Reference" "J4"
 			(at 2.54 -6.32 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "6caeb2d3-67db-457e-853f-7b3e11651a1d")
 			(effects
 				(font
@@ -6652,6 +6657,7 @@
 		(property "Reference" "J15"
 			(at 0 -2.38 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "024cc004-af1d-43f6-9dae-c3fb3f996534")
 			(effects
 				(font
@@ -7917,6 +7923,7 @@
 		(property "Reference" "J7"
 			(at 5.08 -6.32 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "ccd7f35f-2ec1-481a-8058-1da29ee7aaad")
 			(effects
 				(font
@@ -8820,6 +8827,7 @@
 		(property "Reference" "J13"
 			(at 0 -2.38 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "877d76fe-7ff0-4f43-9abc-51fdd61b3ac8")
 			(effects
 				(font
@@ -10441,6 +10449,7 @@
 		(property "Reference" "J9"
 			(at 0 -2.38 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "bdc50160-4e95-4fb6-a8d7-00133a01f6cc")
 			(effects
 				(font
@@ -11364,6 +11373,7 @@
 		(property "Reference" "J11"
 			(at 2.54 -7.02 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "0ca93fce-54b7-4d14-a089-c33e21f6dc7a")
 			(effects
 				(font
@@ -12217,7 +12227,7 @@
 			(uuid "b623d8de-9e1f-407b-af93-c08124a63d8d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Converter_DCDC.3dshapes/Converter_DCDC_TRACO_TMR10-24xxWIR_48xxWIR_72xxWIR_THT.step"
+		(model "${KICAD10_3DMODEL_DIR}/Converter_DCDC.3dshapes/Converter_DCDC_TRACO_TMR-xxxx_THT.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -12641,6 +12651,7 @@
 		(property "Reference" "J5"
 			(at 2.54 -6.32 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "56e67425-a6b2-45b3-9336-c74bc1e5ddc8")
 			(effects
 				(font
@@ -13025,6 +13036,127 @@
 		)
 		(layer "Edge.Cuts")
 		(uuid "1a948980-42d7-4e3e-9531-6e88fdb64c6e")
+	)
+	(gr_text "TAMPER"
+		(at 100.887172 108.215714 0)
+		(layer "F.SilkS")
+		(uuid "58f51658-c062-4c00-8926-5e181992ddef")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "DOOR"
+		(at 101.146074 92.461722 0)
+		(layer "F.SilkS")
+		(uuid "1a761c82-1848-4b5a-a286-97cde722675b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "EXIT"
+		(at 101.458742 76.7826 0)
+		(layer "F.SilkS")
+		(uuid "e4244e31-1bfd-4f7b-9763-b729fc0f2e3f")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "5-60V IN"
+		(at 105.964848 141.041558 0)
+		(layer "F.SilkS")
+		(uuid "7f677d73-e8d0-41eb-9819-93fc7d4d3ac4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "DCDC ON"
+		(at 133.94541 72.304173 0)
+		(layer "F.SilkS")
+		(uuid "35678252-8ebb-48cb-82df-3b05db8f05a8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "BATT"
+		(at 142.219102 51.436528 0)
+		(layer "F.SilkS")
+		(uuid "1b385723-d48a-4154-b064-46c2e41224fa")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "FIRE LINK"
+		(at 191.854169 50.072724 0)
+		(layer "F.SilkS")
+		(uuid "446fbbb1-ed01-431a-9d2e-89c021a18323")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "AUX"
+		(at 201.340701 71.640903 0)
+		(layer "F.SilkS")
+		(uuid "d95e3a3a-2691-4c9e-a220-11eea1bd703d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "FIRE"
+		(at 202.021749 84.376893 0)
+		(layer "F.SilkS")
+		(uuid "4ee1f03b-4e34-42b7-b807-2108043ea86e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "LOCK"
+		(at 202.035491 50.881517 0)
+		(layer "F.SilkS")
+		(uuid "b3a082fc-2cf4-4628-bab3-823a46937bdd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "12V OUT"
+		(at 202.082865 98.575393 0)
+		(layer "F.SilkS")
+		(uuid "bceba084-0ef5-456a-8170-688bc46057b8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
 	)
 	(segment
 		(start 178.9015 109.7615)
