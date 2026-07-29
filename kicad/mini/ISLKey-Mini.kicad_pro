@@ -1,0 +1,41 @@
+{
+  "board": {
+    "design_settings": {},
+    "layer_presets": [],
+    "viewports": []
+  },
+  "boards": [],
+  "meta": {
+    "filename": "ISLKey-Mini.kicad_pro",
+    "version": 3
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "name": "Default",
+        "clearance": 0.2,
+        "track_width": 0.25
+      },
+      {
+        "name": "Power",
+        "clearance": 0.2,
+        "track_width": 0.5
+      }
+    ]
+  },
+  "pcbnew": {
+    "last_paths": {},
+    "page_layout_descr_file": ""
+  },
+  "schematic": {
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "sheets": [
+    [
+      "7b894781-8e06-43df-ad04-17c1bfde3f1d",
+      "Root"
+    ]
+  ],
+  "text_variables": {}
+}
