@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "10.0.4"
     },
-    "CreationDate": "2026-07-29T20:09:02+01:00"
+    "CreationDate": "2026-07-30T00:06:59+01:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -44,13 +44,23 @@
       "FilePolarity": "Positive"
     },
     {
-      "Path": "ISLKey-Mini-F_Adhesive.gbr",
-      "FileFunction": "Glue,Top",
+      "Path": "ISLKey-Mini-F_Mask.gbr",
+      "FileFunction": "SolderMask,Top",
+      "FilePolarity": "Negative"
+    },
+    {
+      "Path": "ISLKey-Mini-B_Mask.gbr",
+      "FileFunction": "SolderMask,Bot",
+      "FilePolarity": "Negative"
+    },
+    {
+      "Path": "ISLKey-Mini-F_Silkscreen.gbr",
+      "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "ISLKey-Mini-B_Adhesive.gbr",
-      "FileFunction": "Glue,Bot",
+      "Path": "ISLKey-Mini-B_Silkscreen.gbr",
+      "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
@@ -64,78 +74,8 @@
       "FilePolarity": "Positive"
     },
     {
-      "Path": "ISLKey-Mini-F_Silkscreen.gbr",
-      "FileFunction": "Legend,Top",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-B_Silkscreen.gbr",
-      "FileFunction": "Legend,Bot",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-F_Mask.gbr",
-      "FileFunction": "SolderMask,Top",
-      "FilePolarity": "Negative"
-    },
-    {
-      "Path": "ISLKey-Mini-B_Mask.gbr",
-      "FileFunction": "SolderMask,Bot",
-      "FilePolarity": "Negative"
-    },
-    {
-      "Path": "ISLKey-Mini-User_Drawings.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_Comments.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_Eco1.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_Eco2.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
       "Path": "ISLKey-Mini-Edge_Cuts.gbr",
       "FileFunction": "Profile",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-F_Fab.gbr",
-      "FileFunction": "AssemblyDrawing,Top",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-B_Fab.gbr",
-      "FileFunction": "AssemblyDrawing,Bot",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_1.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_2.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_3.gbr",
-      "FileFunction": "Other,User",
-      "FilePolarity": "Positive"
-    },
-    {
-      "Path": "ISLKey-Mini-User_4.gbr",
-      "FileFunction": "Other,User",
       "FilePolarity": "Positive"
     }
   ],

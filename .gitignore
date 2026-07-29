@@ -48,3 +48,12 @@ kicad/*.kicad_prl
 kicad/_ztest*
 kicad/*.ses
 kicad/*.dsn
+
+# kicad scratch (any subfolder)
+kicad/**/*.svg
+kicad/**/*.kicad_prl
+kicad/**/drc*.txt
+kicad/mini/_logo*
+kicad/mini/_logo_preview.*
+*.lck
+kicad/mini/*.kicad_mod

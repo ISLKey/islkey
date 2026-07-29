@@ -17,7 +17,7 @@ BOARD SPECS
 FILES
 -----
   Gerbers:  F_Cu B_Cu F_Mask B_Mask F_Silkscreen B_Silkscreen F_Paste B_Paste Edge_Cuts (.gbr)
-  Drill:    ISLKey-Mini.drl (Excellon) ;  Job: ISLKey-Mini-job.gbrjob
+  Drill:    ISLKey-Mini-PTH.drl + ISLKey-Mini-NPTH.drl (Excellon) ;  Job: ISLKey-Mini-job.gbrjob
   CPL:      ISLKey-Mini-CPL.csv (pick & place)
   BOM:      ISLKey-Mini-BOM.csv  +  ISLKey-Mini-BOM-turnkey.csv (with MPNs)
 
