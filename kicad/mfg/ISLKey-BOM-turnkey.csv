@@ -1,0 +1,28 @@
+Item,Refs,Qty,Value,Footprint,Type,Manufacturer,MPN,Distributor,Distributor PN / Link,Notes
+1,"R1,R3,R6,R7,R8",5,1k,R_0805,SMD,Yageo,RC0805FR-071KL,LCSC,C17513,"1% 0805 thick film; Digikey 311-1.00KCRCT-ND"
+2,"R2,R4",2,10k,R_0805,SMD,Yageo,RC0805FR-0710KL,LCSC,C17414,1% 0805
+3,"R5",1,2k2,R_0805,SMD,Yageo,RC0805FR-072K2L,LCSC,C4190,1% 0805 (opto LED series)
+4,"C2,C3,C6",3,100nF,C_0805,SMD,Samsung,CL21B104KBCNNNC,LCSC,C1525,50V X7R decoupling
+5,"C1",1,100uF 16V,CP_Elec_6.3x5.3,SMD,Panasonic,EEE-1CA101P,Digikey,PCE3903CT-ND,SMD alu 6.3mm
+6,"C5",1,100uF 25V,CP_Elec_6.3x5.3,SMD,Panasonic,EEE-1EA101P,Digikey,PCE3915CT-ND,SMD alu 6.3mm (12V bulk)
+7,"C4",1,100uF 100V,CP_Elec_10x10.5,SMD,Nichicon,UCM2A101MNL1GS,Digikey,493-UCM2A101MNL1GS,"100V SMD alu 10mm can (bridge bulk); verify height/dia vs footprint"
+8,"D1,D2",2,1N4007 (M7),D_SMA,SMD,Diodes Inc,M7-13-F,LCSC,C95872,1A 1000V SMA (relay flyback)
+9,"D3",1,PWR (red),LED_0805,SMD,Kingbright,APT2012SURCK,LCSC,C2286,Power indicator LED (red)
+10,"D4,D5",2,GRN,LED_0805,SMD,Kingbright,APT2012LZGCK,LCSC,C72043,Relay-status LEDs (green)
+11,"Q1,Q2",2,PN2222A,TO-92_Inline,THT,onsemi,PN2222ABU,Digikey,PN2222ABU-ND,NPN relay driver
+12,"K1,K2",2,SRD-05VDC-SL-C,Relay_SPDT_SANYOU_SRD,THT,Songle,SRD-05VDC-SL-C,LCSC,C39487,5V coil SPDT 10A relay
+13,"U1",1,PC817,DIP-4_W7.62mm,THT,LiteOn,LTV-817,LCSC,C6553,Optocoupler (fire monitor); Sharp PC817 equivalent
+14,"U3",1,TMR 10-2412WIR,Converter_DCDC_TRACO_TMR10,THT,Traco Power,TMR 10-2412WIR,Digikey,https://www.digikey.com/short/tmr10-2412wir,"9-36V -> iso 12V 10W SIP-8; Mouser also"
+15,"U4",1,TSR 1-2450,Converter_DCDC_TRACO_TSR-1,THT,Traco Power,TSR 1-2450,LCSC,C6886877,"12->5V 1A SIP-3 buck; Digikey too"
+16,"U5",1,DS3231SN,SOIC-16W_7.5x10.3,SMD,Analog Devices (Maxim),DS3231SN#,Digikey,DS3231SN#-ND,"NOTE: 16-SOIC part is DS3231SN (schematic label says DS3231M; the SO-8 'M' does NOT fit this footprint)"
+17,"BR1",1,KBU4M,Diode_Bridge_Vishay_KBU,THT,Comchip,KBU4M-G,Digikey,641-1373-ND,4A 1000V bridge rectifier
+18,"F1 (clips)",2,Fuse clip 5x20,Fuseholder_Clip-5x20mm_Keystone_3512,THT,Keystone,3512,Digikey,36-3512-ND,"TWO clips make one holder (F1)"
+19,"F1 (fuse)",1,T2A 5x20,-,-,Littelfuse,0217002.MXP,Digikey,F2452-ND,2A slow-blow 5x20mm glass fuse
+20,"BT1",1,18650 holder,BatteryHolder_Keystone_1042,SMD,Keystone,1042,Digikey,36-1042-ND,SMT 1x18650 holder
+21,"BT3",1,CR2032 holder,BatteryHolder_Keystone_3002,SMD,Keystone,3002,Digikey,36-3002-ND,SMT CR2032 retainer (RTC backup)
+22,"J3,J4,J5,J8,J10,J11",6,Screw term 2-pin,TerminalBlock MKDS 5.08 1x02,THT,Phoenix Contact,"MKDS 1,5/ 2-5.08 (1715721)",Digikey,277-1247-ND,5.08mm 2-way 17.5A
+23,"J6,J7",2,Screw term 3-pin,TerminalBlock MKDS 5.08 1x03,THT,Phoenix Contact,"MKDS 1,5/ 3-5.08 (1715734)",Digikey,277-1248-ND,5.08mm 3-way (relay COM/NO/NC)
+24,"J9,J13,J15",3,Header 1x02 2.54,PinHeader_1x02_2.54mm,THT,Wurth,61300211121,LCSC,C124378,2-pin 2.54mm header
+25,"J9,J15 shunts",2,Jumper shunt,-,-,Sullins,SPC02SYAN,Digikey,S9337-ND,"2.54mm jumper caps for the FIRE LINK + DCDC ON headers"
+26,"H1-H4",4,M3 mount,MountingHole_3.2mm,Hardware,-,M3 screw/standoff,-,-,"Not populated by assembler; mechanical M3"
+NOTE,,,,,,,,,,"M1 (TTGO T-Display) intentionally omitted - customer-sourced, fits into headers post-assembly. Distributor PNs are indicative; confirm current stock/PN before ordering."
