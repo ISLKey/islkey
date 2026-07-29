@@ -139,10 +139,9 @@ PARTS = [
     ("D3", "Device:LED", "PWR", 300, 155, {"1":"D3K","2":"+5V"}),
     ("R6", "Device:R", "1k", 300, 175, {"1":"D3K","2":"GND"}),
 
-    # Battery: TTGO batt lead pads -> on-board 2x18650 holders (parallel)
+    # Battery: TTGO batt lead pads -> single on-board 18650 holder (3.7V LiPo input)
     ("J13","Connector_Generic:Conn_01x02", "TTGO batt pads", 300, 205, {"1":"VBAT","2":"GND_BAT"}),
     ("BT1","Device:Battery", "18650", 320, 205, {"1":"VBAT","2":"GND_BAT"}),
-    ("BT2","Device:Battery", "18650", 340, 205, {"1":"VBAT","2":"GND_BAT"}),
 
     # RTC (DS3231M) on I2C GPIO21/22, CR2032-backed
     ("U5", "Timer_RTC:DS3231M", "DS3231M", 380, 150,

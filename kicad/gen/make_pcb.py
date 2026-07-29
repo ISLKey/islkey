@@ -92,7 +92,7 @@ def track(bb):
 
 # measure every part, then First-Fit-Decreasing-Height shelf pack (parts of
 # similar height share a row -> minimal wasted vertical space -> compact board)
-BATTERIES = ("BT1", "BT2")   # 78mm holders -> own block, not mixed into the pack
+BATTERIES = ("BT1",)   # single 78mm 18650 holder -> own block, not mixed into the pack
 items = []
 for ref in ORDER:
     fp = fp_by_ref.get(ref)
@@ -116,18 +116,19 @@ for fp, w, h, ox, oy in items:
     track(fp.GetBoundingBox(False, False))
     cx += w + GAP; rowh = max(rowh, h)
 
-# batteries: dedicated block stacked below the circuit (each holder ~78mm long)
+# battery: single 18650 holder (3.7V), horizontal below the circuit
 by = cy + rowh + GAP
+bx = MARGIN
 for ref in BATTERIES:
     fp = fp_by_ref.get(ref)
     if fp is None:
         continue
     fp.SetPosition(pcbnew.VECTOR2I(0, 0))
     bb = fp.GetBoundingBox(False, False)
-    h = pcbnew.ToMM(bb.GetHeight()); ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
-    fp.SetPosition(pcbnew.VECTOR2I(mm(MARGIN - ox), mm(by - oy)))
+    w = pcbnew.ToMM(bb.GetWidth()); ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
+    fp.SetPosition(pcbnew.VECTOR2I(mm(bx - ox), mm(by - oy)))
     track(fp.GetBoundingBox(False, False))
-    by += h + GAP
+    bx += w + GAP
 
 # battery pads J13: centre them between M1's two header rows (TTGO batt lead)
 m1 = fp_by_ref.get("M1"); j13 = fp_by_ref.get("J13")
