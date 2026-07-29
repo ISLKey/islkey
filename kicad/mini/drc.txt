@@ -1,8 +1,16 @@
 ** Drc report for ISLKey-Mini.kicad_pcb **
-** Created on 2026-07-29T19:57:02 **
+** Created on 2026-07-29T20:03:35 **
 ** Report includes: Errors, Warnings **
 
-** Found 10 DRC violations **
+** Found 12 DRC violations **
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: board setup constraints silk; warning
+    @(0.0000 mm, 0.0000 mm): Segment on Edge.Cuts
+    @(34.2750 mm, 0.4050 mm): Reference field of J2
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: board setup constraints silk; warning
+    @(0.0000 mm, 0.0000 mm): Segment on Edge.Cuts
+    @(54.5250 mm, 0.4050 mm): Reference field of J3
 [silk_edge_clearance]: Silkscreen clipped by board edge
     Rule: board setup constraints silk; warning
     @(0.0000 mm, 0.0000 mm): Segment on Edge.Cuts
@@ -11,14 +19,6 @@
     Rule: board setup constraints silk; warning
     @(0.0000 mm, 0.0000 mm): Segment on Edge.Cuts
     @(7.2600 mm, 0.3600 mm): Reference field of K1
-[silk_edge_clearance]: Silkscreen clipped by board edge
-    Rule: board setup constraints silk; warning
-    @(0.0000 mm, 0.0000 mm): Segment on Edge.Cuts
-    @(54.5250 mm, 0.4050 mm): Reference field of J3
-[silk_edge_clearance]: Silkscreen clipped by board edge
-    Rule: board setup constraints silk; warning
-    @(0.0000 mm, 0.0000 mm): Segment on Edge.Cuts
-    @(34.2750 mm, 0.4050 mm): Reference field of J2
 [text_height]: Text height out of range (board setup constraints silk text height min height 0.8000 mm; actual 0.7500 mm)
     Rule: board setup constraints silk text height; warning
     @(5.3450 mm, 45.7750 mm): Footprint text of M1 (USB)
@@ -27,20 +27,28 @@
     @(54.2400 mm, 43.8700 mm): Footprint text of M1 (Ant)
 [silk_overlap]: Silkscreen clearance
     Rule: board setup constraints silk; warning
-    @(44.0750 mm, 23.6250 mm): Segment of L1 on F.Silkscreen
     @(38.7250 mm, 23.3250 mm): Reference field of C6
-[silk_overlap]: Silkscreen clearance
-    Rule: board setup constraints silk; warning
-    @(15.7050 mm, 9.3250 mm): Reference field of R2
-    @(15.4779 mm, 8.7100 mm): Segment of R1 on F.Silkscreen
-[silk_overlap]: Silkscreen clearance
-    Rule: board setup constraints silk; warning
-    @(47.7050 mm, 19.3250 mm): Reference field of R5
-    @(47.4150 mm, 17.9206 mm): Segment of C7 on F.Silkscreen
+    @(44.0750 mm, 23.6250 mm): Segment of L1 on F.Silkscreen
 [silk_overlap]: Silkscreen clearance
     Rule: board setup constraints silk; warning
     @(27.2250 mm, 19.3250 mm): Reference field of C5
     @(26.9150 mm, 17.9206 mm): Segment of C4 on F.Silkscreen
+[silk_overlap]: Silkscreen clearance
+    Rule: board setup constraints silk; warning
+    @(47.4150 mm, 17.9206 mm): Segment of C7 on F.Silkscreen
+    @(47.7050 mm, 19.3250 mm): Reference field of R5
+[silk_overlap]: Silkscreen clearance
+    Rule: board setup constraints silk; warning
+    @(18.0600 mm, 25.9800 mm): Segment of D3 on F.Silkscreen
+    @(19.7050 mm, 26.3250 mm): Reference field of R4
+[silk_overlap]: Silkscreen clearance
+    Rule: board setup constraints silk; warning
+    @(15.7050 mm, 9.3250 mm): Reference field of R2
+    @(15.4779 mm, 8.7100 mm): Segment of R1 on F.Silkscreen
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(19.7050 mm, 26.3250 mm): Reference field of R4
+    @(18.8075 mm, 25.0200 mm): Pad 1 [D3K] of D3 on F.Cu
 
 ** Found 0 unconnected pads **
 

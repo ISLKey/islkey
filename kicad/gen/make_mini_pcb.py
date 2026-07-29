@@ -61,7 +61,7 @@ PLACE = {
     "C4": (25.5, 12, 0), "C5": (25.5, 20, 0),
     "U2": (37, 12, 0), "L1": (37, 17, 0), "C6": (37, 24, 0),
     "C7": (46, 12, 0), "R5": (46, 20, 0), "R6": (46, 24, 0),
-    "D3": (25, 25, 0), "R4": (31, 25, 0),
+    "D3": (18, 24, 0), "R4": (18, 27, 0),
     "C1": (54, 20, 0), "C2": (54, 24, 0),
     # TTGO across the bottom
     "M1": (4, 33, 0),
@@ -100,6 +100,13 @@ seg(W, W, 0, W)                        # bottom
 seg(0, W, 0, NY + NR)                  # left lower
 arc(0, NY + NR, NR, NY, 0, NY - NR)    # left notch
 seg(0, NY - NR, 0, 0)                  # left upper
+
+# ── 8mm hole, horizontally centred, just above the TTGO ──────────────────────
+HOLE_X, HOLE_Y, HOLE_D = 30.0, 28.0, 8.0
+hc = pcbnew.PCB_SHAPE(board); hc.SetShape(pcbnew.SHAPE_T_CIRCLE)
+hc.SetCenter(pcbnew.VECTOR2I(mm(HOLE_X), mm(HOLE_Y)))
+hc.SetEnd(pcbnew.VECTOR2I(mm(HOLE_X + HOLE_D / 2), mm(HOLE_Y)))
+hc.SetLayer(pcbnew.Edge_Cuts); hc.SetWidth(mm(0.15)); board.Add(hc)
 
 # ── GND pour on both layers ──────────────────────────────────────────────────
 gnd = board.FindNet("GND")
