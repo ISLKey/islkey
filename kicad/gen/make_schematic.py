@@ -41,11 +41,11 @@ CAT = {
 }
 
 FP = {  # lib_id -> footprint
-    "Device:R":                 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
-    "Device:C":                 "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm",
-    "Device:C_Polarized":       "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm",
-    "Device:LED":               "LED_THT:LED_D3.0mm",
-    "Device:D":                 "Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal",
+    "Device:R":                 "Resistor_SMD:R_0805_2012Metric",
+    "Device:C":                 "Capacitor_SMD:C_0805_2012Metric",
+    "Device:C_Polarized":       "Capacitor_SMD:CP_Elec_6.3x5.3",       # 100uF low-V (C1/C5)
+    "Device:LED":               "LED_SMD:LED_0805_2012Metric",
+    "Device:D":                 "Diode_SMD:D_SMA",                      # 1A flyback (D1/D2)
     "Transistor_BJT:Q_NPN_EBC": "Package_TO_SOT_THT:TO-92_Inline",
     "Relay:SANYOU_SRD_Form_C":  "Relay_THT:Relay_SPDT_SANYOU_SRD_Series_Form_C",
     "Isolator:PC817":           "Package_DIP:DIP-4_W7.62mm",
@@ -57,7 +57,7 @@ FP = {  # lib_id -> footprint
     "Connector_Generic:Conn_01x04":     "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
     "Device:Fuse":              "Fuse:Fuseholder_Clip-5x20mm_Keystone_3512_Inline_P23.62x7.27mm_D1.02x1.57mm_Horizontal",
     "Diode_Bridge:KBU4A":       "Diode_THT:Diode_Bridge_Vishay_KBU",
-    "Converter_DCDC:TEN20-2411WIN": "Converter_DCDC:Converter_DCDC_TRACO_TEN20-xxxx_THT",
+    "Converter_DCDC:TEN20-2411WIN": "ISLKey:TEN20_TRACO",   # local copy w/ corrected courtyard
     "power:PWR_FLAG":           "",   # schematic-only, excluded from board/BOM
     "ISLKey:TTGO_ESP32_TDISPLAY_V1.1": "ISLKey:TTGO_ESP32_TDisplay_v1.1",
     "Timer_RTC:DS3231M":        "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
@@ -118,7 +118,8 @@ PARTS = [
     ("J10","Connector:Screw_Terminal_01x02", "5-60V AC/DC IN", 300, 60, {"1":"ACL","2":"ACN"}, FP_MKDS3),
     ("F1", "Device:Fuse", "T2A", 320, 60, {"1":"ACL","2":"ACIN1"}),
     ("BR1","Diode_Bridge:KBU4A", "KBU4M (4A)", 345, 70, {"1":"RAWP","2":"ACIN1","3":"ACN","4":"PGND"}),
-    ("C4", "Device:C_Polarized", "100uF/100V", 370, 70, {"1":"RAWP","2":"PGND"}),
+    ("C4", "Device:C_Polarized", "100uF/100V", 370, 70, {"1":"RAWP","2":"PGND"},
+     "Capacitor_SMD:CP_Elec_10x10.5"),   # 100V bulk cap needs a bigger SMD can
     # Isolated DC-DC: 9-36V in (primary RAWP/PGND) -> isolated 12V out (secondary +12V/GND).
     # Traco TEN 20WIN: pin4=Trim(NC), pin6=Remote On/Off (open=ON, positive logic).
     ("U3", "Converter_DCDC:TEN20-2411WIN", "TEN20-2412WIN", 395, 75,

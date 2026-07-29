@@ -64,25 +64,14 @@ for p in data["parts"]:
             pad.SetNet(get_net(net))
     placed.append((fp, p["ref"]))
 
-# ── tight placement: pack parts edge-to-edge in functional order ──────────────
-# Row-pack at a fixed width (the 78mm 18650 holders set the floor) with small
-# gaps, keeping related parts adjacent. Priority here is a SMALL board; fine-
-# tune positions/rotations in the GUI before routing.
-ORDER = [
-    "J3", "J4", "J5",                                   # field inputs
-    "M1",                                               # TTGO module
-    "C1", "C2", "C3", "D3", "R6",                       # 5V/3V3 decoupling + LED
-    "U5", "C6", "BT3",                                  # RTC + coin cell
-    "R1", "R2", "Q1", "D1", "D4", "R7", "K1", "J6",     # relay ch1 (lock)
-    "R3", "R4", "Q2", "D2", "D5", "R8", "K2", "J7",     # relay ch2 (aux)
-    "R5", "U1", "J9", "J8",                             # fire monitor
-    "J10", "F1", "BR1", "C4", "U3", "C5", "U4", "J11",  # power chain
-    "BT1", "BT2",                                       # 2x18650 holders
-]
+# ── placement: perimeter screw terminals + USB-clear TTGO + battery are FIXED;
+#    the small interior parts are auto-packed into the middle. Terminals face
+#    outward for edge wiring; U3 kept off M1's USB (left) end. ────────────────
 fp_by_ref = {ref: fp for fp, ref in placed}
-ORDER += [ref for _f, ref in placed if ref not in set(ORDER) and ref != "J13"]
 
-W, GAP, MARGIN = 140.0, 4.0, 8.0
+def bbnt(fp):
+    return fp.GetBoundingBox(False, False)
+
 maxx = maxy = 0.0
 minx = miny = 1e9
 def track(bb):
@@ -90,45 +79,55 @@ def track(bb):
     maxx = max(maxx, pcbnew.ToMM(bb.GetRight())); maxy = max(maxy, pcbnew.ToMM(bb.GetBottom()))
     minx = min(minx, pcbnew.ToMM(bb.GetLeft())); miny = min(miny, pcbnew.ToMM(bb.GetTop()))
 
-# measure every part, then First-Fit-Decreasing-Height shelf pack (parts of
-# similar height share a row -> minimal wasted vertical space -> compact board)
-BATTERIES = ("BT1",)   # single 78mm 18650 holder -> own block, not mixed into the pack
-items = []
-for ref in ORDER:
+def place_topleft(ref, x, y, rot):
+    """Place footprint so its (text-excluded) bbox top-left corner lands at (x,y)."""
     fp = fp_by_ref.get(ref)
-    if fp is None or ref in BATTERIES:
-        continue
+    if fp is None:
+        return
+    try:
+        fp.SetOrientationDegrees(rot)
+    except Exception:
+        fp.SetOrientation(pcbnew.EDA_ANGLE(rot, pcbnew.DEGREES_T))
+    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
+    bb = bbnt(fp)
+    fp.SetPosition(pcbnew.VECTOR2I(mm(x - pcbnew.ToMM(bb.GetX())), mm(y - pcbnew.ToMM(bb.GetY()))))
+    track(bbnt(fp))
+
+# fixed: ref -> (bbox-topleft x, y, rotation).  Rotations orient the wire entry
+# toward the nearest board edge (refine in GUI if needed).
+FIXED = {
+    "M1":  (24, 10, 0),                                  # TTGO top-left; USB (left) faces board edge
+    "J3":  (6, 46, 180), "J4": (6, 63, 180), "J5": (6, 80, 180),   # inputs -> left edge
+    "J6":  (120, 18, 0), "J7": (120, 40, 0), "J8": (120, 62, 0),   # lock/aux/fire -> right edge
+    "J10": (26, 126, 90), "J11": (54, 126, 90),          # power in / 12V out -> bottom edge
+    "BT1": (24, 150, 0),                                 # 18650 -> bottom strip
+}
+for ref, (x, y, rot) in FIXED.items():
+    place_topleft(ref, x, y, rot)
+
+# interior parts auto-packed (FFDH) into the box between the terminal columns,
+# below M1 and above the bottom terminals
+IX0, IY0, IW, IGAP = 24.0, 42.0, 88.0, 2.0
+interior = [ref for _f, ref in placed if ref not in FIXED and ref != "J13"]
+items = []
+for ref in interior:
+    fp = fp_by_ref[ref]
     try:
         fp.SetOrientationDegrees(0)
     except Exception:
         pass
     fp.SetPosition(pcbnew.VECTOR2I(0, 0))
-    bb = fp.GetBoundingBox(False, False)
+    bb = bbnt(fp)
     items.append((fp, pcbnew.ToMM(bb.GetWidth()), pcbnew.ToMM(bb.GetHeight()),
                   pcbnew.ToMM(bb.GetX()), pcbnew.ToMM(bb.GetY())))
-items.sort(key=lambda it: -it[2])   # tallest first
-
-cx, cy, rowh = MARGIN, MARGIN, 0.0
+items.sort(key=lambda it: -it[2])
+cx, cy, rowh = IX0, IY0, 0.0
 for fp, w, h, ox, oy in items:
-    if cx > MARGIN and cx + w > W + MARGIN:      # wrap to next shelf
-        cx = MARGIN; cy += rowh + GAP; rowh = 0.0
+    if cx > IX0 and cx + w > IX0 + IW:
+        cx = IX0; cy += rowh + IGAP; rowh = 0.0
     fp.SetPosition(pcbnew.VECTOR2I(mm(cx - ox), mm(cy - oy)))
-    track(fp.GetBoundingBox(False, False))
-    cx += w + GAP; rowh = max(rowh, h)
-
-# battery: single 18650 holder (3.7V), horizontal below the circuit
-by = cy + rowh + GAP
-bx = MARGIN
-for ref in BATTERIES:
-    fp = fp_by_ref.get(ref)
-    if fp is None:
-        continue
-    fp.SetPosition(pcbnew.VECTOR2I(0, 0))
-    bb = fp.GetBoundingBox(False, False)
-    w = pcbnew.ToMM(bb.GetWidth()); ox = pcbnew.ToMM(bb.GetX()); oy = pcbnew.ToMM(bb.GetY())
-    fp.SetPosition(pcbnew.VECTOR2I(mm(bx - ox), mm(by - oy)))
-    track(fp.GetBoundingBox(False, False))
-    bx += w + GAP
+    track(bbnt(fp))
+    cx += w + IGAP; rowh = max(rowh, h)
 
 # battery pads J13: centre them between M1's two header rows (TTGO batt lead)
 m1 = fp_by_ref.get("M1"); j13 = fp_by_ref.get("J13")
@@ -136,7 +135,9 @@ if m1 and j13:
     xs = [pad.GetPosition().x for pad in m1.Pads()]
     ys = [pad.GetPosition().y for pad in m1.Pads()]
     j13.SetPosition(pcbnew.VECTOR2I(sum(xs) // len(xs), sum(ys) // len(ys)))
-    track(j13.GetBoundingBox())
+    track(bbnt(j13))
+
+MARGIN = 6.0
 
 # ── board outline (Edge.Cuts rectangle) ──────────────────────────────────────
 x0, y0 = minx - MARGIN, miny - MARGIN
