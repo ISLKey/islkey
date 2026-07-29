@@ -1699,6 +1699,7 @@
 		(property "Reference" "J2"
 			(at 3.5 -4.22 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "4fa6309f-3282-45d2-b10e-b705442535c1")
 			(effects
 				(font
@@ -2073,6 +2074,7 @@
 		(property "Reference" "J3"
 			(at 1.75 -4.22 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "b10ac3e0-5d76-4b11-961a-0cb1fdf5c801")
 			(effects
 				(font
@@ -2407,6 +2409,7 @@
 		(property "Reference" "J1"
 			(at 1.75 -4.22 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "48e18297-d6d9-4a44-b358-ebd6e7f03440")
 			(effects
 				(font
@@ -6609,6 +6612,50 @@
 		)
 		(layer "Edge.Cuts")
 		(uuid "3c883994-db2e-4f38-afe0-984a07d39379")
+	)
+	(gr_text "RELAY"
+		(at 3.56 3.06 0)
+		(layer "F.SilkS")
+		(uuid "30261004-9a3d-415d-8f75-ac4af09db8ea")
+		(effects
+			(font
+				(size 0.9 0.9)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "LOCK"
+		(at 30.775 4.625 0)
+		(layer "F.SilkS")
+		(uuid "3c304f78-a711-447e-910f-f1f9e432a367")
+		(effects
+			(font
+				(size 0.9 0.9)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "12V"
+		(at 43.775 4.625 0)
+		(layer "F.SilkS")
+		(uuid "bff69fba-2129-4062-bb80-6c481b9213b0")
+		(effects
+			(font
+				(size 0.9 0.9)
+				(thickness 0.15)
+			)
+		)
+	)
+	(gr_text "EXIT"
+		(at 52.775 4.625 0)
+		(layer "F.SilkS")
+		(uuid "b7bbba83-1f58-4ccc-9f4d-f926d5d79af1")
+		(effects
+			(font
+				(size 0.9 0.9)
+				(thickness 0.15)
+			)
+		)
 	)
 	(segment
 		(start 48.025 15.575)
