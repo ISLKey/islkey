@@ -82,7 +82,7 @@ ORDER = [
 fp_by_ref = {ref: fp for fp, ref in placed}
 ORDER += [ref for _f, ref in placed if ref not in set(ORDER) and ref != "J13"]
 
-W, GAP, MARGIN = 130.0, 2.0, 6.0
+W, GAP, MARGIN = 140.0, 4.0, 8.0
 maxx = maxy = 0.0
 minx = miny = 1e9
 def track(bb):

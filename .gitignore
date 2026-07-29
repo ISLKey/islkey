@@ -46,3 +46,5 @@ kicad/*.kicad_prl
 # editor local history
 .history/
 kicad/_ztest*
+kicad/*.ses
+kicad/*.dsn
