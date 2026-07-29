@@ -20,6 +20,7 @@
 "J10","5-60V AC/DC IN","TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal","1"
 "J11","12V OUT (lock/aux)","TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal","1"
 "J13","TTGO batt pads","Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical","1"
+"J15","DCDC ON link (Ctrl-+Vin)","Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical","1"
 "K1,K2","SRD-05VDC-SL-C","Relay_THT:Relay_SPDT_SANYOU_SRD_Series_Form_C","2"
 "M1","TTGO T-Display","ISLKey:TTGO_ESP32_TDisplay_v1.1","1"
 "Q1,Q2","PN2222A","Package_TO_SOT_THT:TO-92_Inline","2"

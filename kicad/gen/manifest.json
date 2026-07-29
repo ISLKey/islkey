@@ -1,12 +1,12 @@
 {
- "root": "2ec429ed-5803-45ab-b675-2bf011ea27c5",
+ "root": "54800761-4b59-40c1-8d68-0aca20583d07",
  "parts": [
   {
    "ref": "M1",
    "lib": "ISLKey:TTGO_ESP32_TDISPLAY_V1.1",
    "value": "TTGO T-Display",
    "footprint": "ISLKey:TTGO_ESP32_TDisplay_v1.1",
-   "uuid": "9f7f6c3d-2ba0-4354-894c-9e173e1b9c71",
+   "uuid": "644957a4-424e-4ff2-aa17-c46094f27c17",
    "nets": {
     "7": "RLY1",
     "6": "RLY2",
@@ -31,7 +31,7 @@
    "lib": "Connector:Screw_Terminal_01x02",
    "value": "Exit btn",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
-   "uuid": "546d410b-e068-4056-b884-12b22057c473",
+   "uuid": "41551d03-4aa2-460c-9f08-1e8846ece966",
    "nets": {
     "1": "EXIT",
     "2": "GND"
@@ -42,7 +42,7 @@
    "lib": "Connector:Screw_Terminal_01x02",
    "value": "Door contact",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
-   "uuid": "e124203c-c2f8-473d-9867-b1160ea2cc83",
+   "uuid": "113fe0e8-4bb7-47fc-8e92-3f213d52d120",
    "nets": {
     "1": "DOOR",
     "2": "GND"
@@ -53,7 +53,7 @@
    "lib": "Connector:Screw_Terminal_01x02",
    "value": "Tamper",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
-   "uuid": "be7dc14a-6cc5-439a-893c-0d44f9571be8",
+   "uuid": "c4ff4bde-8685-45ed-b3a5-cc99fcb41aba",
    "nets": {
     "1": "TAMPER",
     "2": "GND"
@@ -64,7 +64,7 @@
    "lib": "Device:R",
    "value": "1k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "9d01aea7-6cdd-4a64-aaea-7b1ce86e9d35",
+   "uuid": "c37adaf8-e56a-4115-9e42-539ea3a2eedf",
    "nets": {
     "1": "RLY1",
     "2": "RLY1_B"
@@ -75,7 +75,7 @@
    "lib": "Device:R",
    "value": "10k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "08bc9c55-8667-4fdb-a015-813bb67be7c0",
+   "uuid": "983161b6-abdd-478d-8baf-256dcaa8a8b2",
    "nets": {
     "1": "RLY1_B",
     "2": "GND"
@@ -86,7 +86,7 @@
    "lib": "Transistor_BJT:Q_NPN_EBC",
    "value": "PN2222A",
    "footprint": "Package_TO_SOT_THT:TO-92_Inline",
-   "uuid": "bfd13b14-16d7-4b89-bc06-598590d22148",
+   "uuid": "de43928f-2c30-4f5c-9448-8da99fa92d11",
    "nets": {
     "1": "GND",
     "2": "RLY1_B",
@@ -98,7 +98,7 @@
    "lib": "Relay:SANYOU_SRD_Form_C",
    "value": "SRD-05VDC-SL-C",
    "footprint": "Relay_THT:Relay_SPDT_SANYOU_SRD_Series_Form_C",
-   "uuid": "b5eb9ba8-f334-4977-a1e1-ce97506dd0cc",
+   "uuid": "eaead831-be40-479a-8499-eb836c71a64f",
    "nets": {
     "1": "LK1_COM",
     "2": "K1_C",
@@ -112,7 +112,7 @@
    "lib": "Device:D",
    "value": "1N4007",
    "footprint": "Diode_SMD:D_SMA",
-   "uuid": "ff620425-19e5-462a-a12a-1e697bee1ba0",
+   "uuid": "d0549d11-43ea-4869-8a72-f286713ca904",
    "nets": {
     "1": "+5V",
     "2": "K1_C"
@@ -123,7 +123,7 @@
    "lib": "Device:LED",
    "value": "GRN",
    "footprint": "LED_SMD:LED_0805_2012Metric",
-   "uuid": "24ee6bb5-65cd-466f-b467-11b9d8b2cfaf",
+   "uuid": "774effc5-79e5-43bd-9289-4dda95e116db",
    "nets": {
     "1": "D4K",
     "2": "+5V"
@@ -134,7 +134,7 @@
    "lib": "Device:R",
    "value": "1k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "866e3dc0-0a59-4d43-958e-1edfdf01b7d8",
+   "uuid": "e936b96a-5ac1-44f2-b0b2-8ad2cad98d3d",
    "nets": {
     "1": "D4K",
     "2": "K1_C"
@@ -145,7 +145,7 @@
    "lib": "Connector:Screw_Terminal_01x03",
    "value": "LOCK COM/NO/NC",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal",
-   "uuid": "412bc3ce-a324-4a6c-83c2-bf5e8cf367aa",
+   "uuid": "cc504042-722b-4f2e-87eb-c9467c3e3c68",
    "nets": {
     "1": "LK1_COM",
     "2": "LK1_NO",
@@ -157,7 +157,7 @@
    "lib": "Device:R",
    "value": "1k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "e8da6518-be29-420c-a5c3-3a1d0557d594",
+   "uuid": "db570815-64cf-4802-a5ba-a66288076660",
    "nets": {
     "1": "RLY2",
     "2": "RLY2_B"
@@ -168,7 +168,7 @@
    "lib": "Device:R",
    "value": "10k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "158c1c1e-e291-49a6-9092-f43849a3bbbc",
+   "uuid": "c38e3cf3-6de1-440d-b241-1008c7c075db",
    "nets": {
     "1": "RLY2_B",
     "2": "GND"
@@ -179,7 +179,7 @@
    "lib": "Transistor_BJT:Q_NPN_EBC",
    "value": "PN2222A",
    "footprint": "Package_TO_SOT_THT:TO-92_Inline",
-   "uuid": "8b5ca00b-fe14-41ab-ac7a-509658c4dfb2",
+   "uuid": "24a54f45-879b-487d-85fb-028e7731c9c6",
    "nets": {
     "1": "GND",
     "2": "RLY2_B",
@@ -191,7 +191,7 @@
    "lib": "Relay:SANYOU_SRD_Form_C",
    "value": "SRD-05VDC-SL-C",
    "footprint": "Relay_THT:Relay_SPDT_SANYOU_SRD_Series_Form_C",
-   "uuid": "05d1699e-bf1c-4e57-9752-f46a35eb05f8",
+   "uuid": "539dd3a7-aac5-4497-97ec-3ef89b006880",
    "nets": {
     "1": "LK2_COM",
     "2": "K2_C",
@@ -205,7 +205,7 @@
    "lib": "Device:D",
    "value": "1N4007",
    "footprint": "Diode_SMD:D_SMA",
-   "uuid": "5a7b843f-7dd3-463b-8bb4-9fa7f9522176",
+   "uuid": "8ee09996-5438-4ba5-b04f-901f00f6c5d7",
    "nets": {
     "1": "+5V",
     "2": "K2_C"
@@ -216,7 +216,7 @@
    "lib": "Device:LED",
    "value": "GRN",
    "footprint": "LED_SMD:LED_0805_2012Metric",
-   "uuid": "fe1ee98e-cfbd-4953-9d0f-6ccae5f55b32",
+   "uuid": "b1d1b3c9-2485-4feb-8578-229e17913915",
    "nets": {
     "1": "D5K",
     "2": "+5V"
@@ -227,7 +227,7 @@
    "lib": "Device:R",
    "value": "1k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "33ee82a1-5100-435a-b114-08bf07f0524f",
+   "uuid": "a1a95fc3-b702-4c4c-b975-5473e08588cd",
    "nets": {
     "1": "D5K",
     "2": "K2_C"
@@ -238,7 +238,7 @@
    "lib": "Connector:Screw_Terminal_01x03",
    "value": "AUX COM/NO/NC",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal",
-   "uuid": "f2351878-2b2c-430a-a2c4-577da8198088",
+   "uuid": "d25af236-0e2e-4092-bbba-5841d2e1981d",
    "nets": {
     "1": "LK2_COM",
     "2": "LK2_NO",
@@ -250,7 +250,7 @@
    "lib": "Isolator:PC817",
    "value": "PC817",
    "footprint": "Package_DIP:DIP-4_W7.62mm",
-   "uuid": "6d6946a5-18eb-4d05-9869-03e95428671c",
+   "uuid": "f1947b3d-cecd-4316-bbfc-34edd80af46f",
    "nets": {
     "1": "OPTO_A",
     "2": "FIRE_B",
@@ -263,7 +263,7 @@
    "lib": "Device:R",
    "value": "2k2",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "abf5b910-83f2-4ec4-a14f-a615691a69a9",
+   "uuid": "e57fc560-d7d2-47f3-b365-8f5bddc264f5",
    "nets": {
     "1": "FIRE_A",
     "2": "OPTO_A"
@@ -274,7 +274,7 @@
    "lib": "Connector:Screw_Terminal_01x02",
    "value": "Fire volt-free",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",
-   "uuid": "bcf947f5-f91f-4182-be9e-29d3055f6755",
+   "uuid": "56df8789-4686-45a4-b47d-f12c63939e23",
    "nets": {
     "1": "FIRE_A",
     "2": "FIRE_B"
@@ -285,7 +285,7 @@
    "lib": "Connector_Generic:Conn_01x02",
    "value": "Fire link COM-Fire",
    "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
-   "uuid": "8c070b4e-1db9-489c-897f-66c6cfaaddf6",
+   "uuid": "3dc7fc7c-fd2f-48be-816f-6282db63cd67",
    "nets": {
     "1": "LK1_COM",
     "2": "FIRE_A"
@@ -296,7 +296,7 @@
    "lib": "Connector:Screw_Terminal_01x02",
    "value": "5-60V AC/DC IN",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal",
-   "uuid": "c54e2a9b-c1ae-4fd9-bfcd-1fc050ce3286",
+   "uuid": "ec90933f-a8fc-4943-8c57-e2c8b7189086",
    "nets": {
     "1": "ACL",
     "2": "ACN"
@@ -307,7 +307,7 @@
    "lib": "Device:Fuse",
    "value": "T2A",
    "footprint": "Fuse:Fuseholder_Clip-5x20mm_Keystone_3512_Inline_P23.62x7.27mm_D1.02x1.57mm_Horizontal",
-   "uuid": "a8b8641c-db10-46ff-bcda-f3698e982be5",
+   "uuid": "a37c274a-1d9b-4ce5-8ea0-16334401a417",
    "nets": {
     "1": "ACL",
     "2": "ACIN1"
@@ -318,7 +318,7 @@
    "lib": "Diode_Bridge:KBU4A",
    "value": "KBU4M (4A)",
    "footprint": "Diode_THT:Diode_Bridge_Vishay_KBU",
-   "uuid": "2f7b989e-6a28-4bac-9621-2797c0631249",
+   "uuid": "a5ea8db9-a1ce-434c-a8d9-c0f248827abf",
    "nets": {
     "1": "RAWP",
     "2": "ACIN1",
@@ -331,7 +331,7 @@
    "lib": "Device:C_Polarized",
    "value": "100uF/100V",
    "footprint": "Capacitor_SMD:CP_Elec_10x10.5",
-   "uuid": "ae1fb35f-d7f2-4715-ab22-9c969ec12b54",
+   "uuid": "24c59d03-984c-4d71-83c3-e7b8fd1df3e7",
    "nets": {
     "1": "RAWP",
     "2": "PGND"
@@ -342,11 +342,11 @@
    "lib": "Converter_DCDC:TMR10-2410WIR",
    "value": "TMR10-2412WIR",
    "footprint": "Converter_DCDC:Converter_DCDC_TRACO_TMR10-24xxWIR_48xxWIR_72xxWIR_THT",
-   "uuid": "3b0414c6-a6c0-415f-a9aa-a271413f668e",
+   "uuid": "26fa9cda-0809-4d54-85bb-d4f39023e0a5",
    "nets": {
     "1": "PGND",
     "2": "RAWP",
-    "3": "NC",
+    "3": "DCDC_CTRL",
     "6": "+12V",
     "7": "GND",
     "8": "NC",
@@ -355,11 +355,22 @@
    }
   },
   {
+   "ref": "J15",
+   "lib": "Connector_Generic:Conn_01x02",
+   "value": "DCDC ON link (Ctrl-+Vin)",
+   "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+   "uuid": "7f35e885-df31-4520-b516-109345f8e154",
+   "nets": {
+    "1": "DCDC_CTRL",
+    "2": "RAWP"
+   }
+  },
+  {
    "ref": "C5",
    "lib": "Device:C_Polarized",
    "value": "100uF/25V",
    "footprint": "Capacitor_SMD:CP_Elec_6.3x5.3",
-   "uuid": "6cebe958-a609-4bd7-af4b-f1e4ed925119",
+   "uuid": "b3d42fc9-368b-44a1-8e5e-7b84d8a8a083",
    "nets": {
     "1": "+12V",
     "2": "GND"
@@ -370,7 +381,7 @@
    "lib": "power:PWR_FLAG",
    "value": "PWR_FLAG",
    "footprint": "",
-   "uuid": "0a42746b-e9b8-4c8a-b531-67f4f5b3fb1d",
+   "uuid": "d6671a1b-6414-4a36-bc17-cd9d47ce53c9",
    "nets": {
     "1": "RAWP"
    }
@@ -380,7 +391,7 @@
    "lib": "power:PWR_FLAG",
    "value": "PWR_FLAG",
    "footprint": "",
-   "uuid": "4dc52acc-ff34-43ba-be9e-ca2b8d3e81fc",
+   "uuid": "b77ada61-662e-4217-bcd7-2d380917018a",
    "nets": {
     "1": "PGND"
    }
@@ -390,7 +401,7 @@
    "lib": "Connector:Screw_Terminal_01x02",
    "value": "12V OUT (lock/aux)",
    "footprint": "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-2-5.08_1x02_P5.08mm_Horizontal",
-   "uuid": "89700b6b-237d-4f59-b1aa-aad5fb457b29",
+   "uuid": "eed58a5b-0283-4f49-8fde-00ac54557a9b",
    "nets": {
     "1": "+12V",
     "2": "GND"
@@ -401,7 +412,7 @@
    "lib": "Connector_Generic:Conn_01x03",
    "value": "TSR-1-2450",
    "footprint": "Converter_DCDC:Converter_DCDC_TRACO_TSR-1_THT",
-   "uuid": "9d437008-b712-4135-916d-db77d66daa39",
+   "uuid": "d0a0b38a-da15-4ccb-96f1-f1eecd2f993d",
    "nets": {
     "1": "+12V",
     "2": "GND",
@@ -413,7 +424,7 @@
    "lib": "Device:C_Polarized",
    "value": "100uF/16V",
    "footprint": "Capacitor_SMD:CP_Elec_6.3x5.3",
-   "uuid": "f03bfa89-1b4f-4cff-a876-78602a2c804a",
+   "uuid": "bd771249-c25a-4106-ab96-0434e81dcf6f",
    "nets": {
     "1": "+5V",
     "2": "GND"
@@ -424,7 +435,7 @@
    "lib": "Device:C",
    "value": "100nF",
    "footprint": "Capacitor_SMD:C_0805_2012Metric",
-   "uuid": "d34f4eaf-2f08-419b-a558-15bb267de567",
+   "uuid": "ad22c607-e362-4396-ba7b-651fc5ca2bad",
    "nets": {
     "1": "+5V",
     "2": "GND"
@@ -435,7 +446,7 @@
    "lib": "Device:C",
    "value": "100nF",
    "footprint": "Capacitor_SMD:C_0805_2012Metric",
-   "uuid": "f74efaac-cd9c-4a35-bdd5-e3d88befd6c4",
+   "uuid": "b7cbfe9c-2a71-4086-8994-5fcdba57f1d6",
    "nets": {
     "1": "+3V3",
     "2": "GND"
@@ -446,7 +457,7 @@
    "lib": "Device:LED",
    "value": "PWR",
    "footprint": "LED_SMD:LED_0805_2012Metric",
-   "uuid": "292e1070-4db1-46d5-b65d-4a00cc08ad78",
+   "uuid": "bfb52425-d6a7-40b5-8855-952a01e9aed4",
    "nets": {
     "1": "D3K",
     "2": "+5V"
@@ -457,7 +468,7 @@
    "lib": "Device:R",
    "value": "1k",
    "footprint": "Resistor_SMD:R_0805_2012Metric",
-   "uuid": "17bc948b-9c86-4b25-9668-2a0e499b20c3",
+   "uuid": "c2ab9829-ce95-4e29-a9ed-40e0d0527706",
    "nets": {
     "1": "D3K",
     "2": "GND"
@@ -468,7 +479,7 @@
    "lib": "Connector_Generic:Conn_01x02",
    "value": "TTGO batt pads",
    "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
-   "uuid": "660e420b-313d-451d-bc67-5a3e738a3317",
+   "uuid": "83599711-fc03-47ec-b676-b46ef8f09e95",
    "nets": {
     "1": "VBAT",
     "2": "GND_BAT"
@@ -479,7 +490,7 @@
    "lib": "Device:Battery",
    "value": "18650",
    "footprint": "Battery:BatteryHolder_Keystone_1042_1x18650",
-   "uuid": "d261b5f1-52c7-4eee-a86a-b0c0f4d93871",
+   "uuid": "30f1d732-5777-41c6-9fb7-ba65d2babc88",
    "nets": {
     "1": "VBAT",
     "2": "GND_BAT"
@@ -490,7 +501,7 @@
    "lib": "Timer_RTC:DS3231M",
    "value": "DS3231M",
    "footprint": "Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm",
-   "uuid": "d882413c-1ab8-4046-829a-c235cd386ac2",
+   "uuid": "933ff89f-559c-491d-a8c2-96a4ccc42a8d",
    "nets": {
     "2": "+3V3",
     "14": "RTC_VBAT",
@@ -515,7 +526,7 @@
    "lib": "Device:C",
    "value": "100nF",
    "footprint": "Capacitor_SMD:C_0805_2012Metric",
-   "uuid": "e704c323-ef03-4424-951d-2276c56868d2",
+   "uuid": "89475319-1f02-4916-b830-6f5152072b08",
    "nets": {
     "1": "+3V3",
     "2": "GND"
@@ -526,7 +537,7 @@
    "lib": "Device:Battery_Cell",
    "value": "CR2032",
    "footprint": "Battery:BatteryHolder_Keystone_3002_1x2032",
-   "uuid": "f5f766e0-a55d-4356-9c11-d40d00a62f0d",
+   "uuid": "bea18aef-89fc-4b15-8f1e-0d1ae854ee06",
    "nets": {
     "1": "RTC_VBAT",
     "2": "GND"
@@ -537,7 +548,7 @@
    "lib": "power:PWR_FLAG",
    "value": "PWR_FLAG",
    "footprint": "",
-   "uuid": "fefedc2d-64e1-42e1-b0b3-d8d89e135b18",
+   "uuid": "ab654256-73d1-4cc2-8627-614b44154bfd",
    "nets": {
     "1": "+3V3"
    }
@@ -547,7 +558,7 @@
    "lib": "power:PWR_FLAG",
    "value": "PWR_FLAG",
    "footprint": "",
-   "uuid": "e1b8f3a4-91e3-4002-a57a-c985f024f848",
+   "uuid": "4543a2fb-15f3-4bda-be77-41fdd28111e7",
    "nets": {
     "1": "RTC_VBAT"
    }

@@ -123,7 +123,9 @@ PARTS = [
     # Isolated DC-DC: 9-36V in (primary RAWP/PGND) -> isolated 12V/10W out (secondary +12V/GND).
     # Traco TMR10-2412WIR: 1=-Vin,2=+Vin,3=Remote(open=ON),6=+Vout,7=-Vout,9/10=Case->GND.
     ("U3", "Converter_DCDC:TMR10-2410WIR", "TMR10-2412WIR", 395, 75,
-     {"1":"PGND","2":"RAWP","3":NC,"6":"+12V","7":"GND","8":NC,"9":NC,"10":NC}),
+     {"1":"PGND","2":"RAWP","3":"DCDC_CTRL","6":"+12V","7":"GND","8":NC,"9":NC,"10":NC}),
+    # Ctrl/Remote enable jumper: fit shunt -> Ctrl tied to +Vin (ON); remove -> open (ON for positive logic)
+    ("J15","Connector_Generic:Conn_01x02", "DCDC ON link (Ctrl-+Vin)", 460, 90, {"1":"DCDC_CTRL","2":"RAWP"}),
     ("C5", "Device:C_Polarized", "100uF/25V", 440, 75, {"1":"+12V","2":"GND"}),
     # PWR_FLAGs: tell ERC the raw primary rails are driven (bridge diode outputs are 'passive')
     ("#FLG1", "power:PWR_FLAG", "PWR_FLAG", 360, 92, {"1":"RAWP"}),
